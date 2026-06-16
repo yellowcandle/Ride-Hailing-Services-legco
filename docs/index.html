@@ -5,391 +5,1638 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>網約車附屬法例意見書分析報告 (sc103)</title>
 <style>
-  :root {
-    --ink: #1a1a2e;
-    --accent: #b03a2e;
-    --gold: #b8860b;
-    --bg: #faf8f5;
-    --card: #ffffff;
-    --line: #e3ddd3;
-    --green: #1e7d4f;
-    --red: #b03a2e;
-    --amber: #b8860b;
+@font-face {
+  font-family: 'MetroSung';
+  src: url('fonts/MetroSung-subset.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  --ink: #1a1a2e;
+  --ink-2: #2d2d4e;
+  --paper: #faf8f5;
+  --card: #ffffff;
+  --redline: #b03a2e;
+  --redline-on-dark: #d4715e;  /* legible terracotta for redline-as-text/marker on the navy panel */
+  --gold: #b8860b;             /* fills only: bar segment, swatch, marker ring */
+  --gold-text: #8a6608;        /* darker gold for text on light grounds (AA) */
+  --green: #1a7045;
+  --rule: #e3ddd3;
+  --rule-2: #ece7df;
+  --body: #3a3630;
+  --muted: #6b6557;
+  --faint: #8a8578;
+  --navy-rule: #3a3a52;
+  --navy-line: #2a2a40;
+  --header-tint: #f0ece4;
+  --row-tint: #fbfaf7;
+  --quote-tint: #fdf9ee;
+  --sans: "PingFang HK","PingFang TC","Microsoft JhengHei","Noto Sans HK",sans-serif;
+  --serif: "MetroSung","Noto Serif HK","Noto Serif TC",serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--body);
+  margin: 0;
+  line-height: 1.85;
+  font-size: 1.0625rem;
+  text-wrap: pretty;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 1080px;
+  margin-inline: auto;
+  padding-inline: clamp(20px, 5vw, 44px);
+}
+
+/* ===== MASTHEAD ===== */
+header.masthead {
+  background: var(--ink);
+  color: #fff;
+  padding-block: 52px 44px;
+}
+
+header.masthead .wrap { padding-inline: clamp(20px, 5vw, 44px); }
+
+.masthead-edition {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--navy-rule);
+  font-size: 0.78rem;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.masthead-edition .source-label {
+  color: #c9c4b8;
+  line-height: 1.4;
+}
+
+.masthead-edition .report-type {
+  color: var(--redline-on-dark);
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.masthead-title {
+  font-family: var(--serif);
+  font-size: clamp(2.1rem, 6vw, 4.4rem);
+  font-weight: 400;
+  color: #fff;
+  margin: 20px 0 14px;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .masthead-title {
+    animation: rise-fade 0.6s cubic-bezier(.2,1,.3,1) both;
   }
-  * { box-sizing: border-box; }
-  body {
-    font-family: "PingFang HK", "PingFang TC", "Microsoft JhengHei", "Noto Sans HK", sans-serif;
-    background: var(--bg);
-    color: var(--ink);
-    margin: 0;
-    line-height: 1.75;
+  .masthead-deck {
+    animation: rise-fade 0.6s 0.12s cubic-bezier(.2,1,.3,1) both;
   }
-  .wrap { max-width: 960px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
-  header.hero {
-    background: linear-gradient(135deg, #1a1a2e 0%, #2d2d4e 100%);
-    color: #fff;
-    padding: 3rem 1.5rem 2.5rem;
+  @keyframes rise-fade {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
   }
-  header.hero .wrap { padding: 0; max-width: 960px; margin: 0 auto; }
-  header.hero h1 { font-size: 1.75rem; margin: 0 0 .5rem; line-height: 1.4; }
-  header.hero .sub { color: #c9c4b8; font-size: .95rem; }
-  header.hero .meta { margin-top: 1rem; font-size: .85rem; color: #a8a399; }
-  h2 {
-    font-size: 1.35rem;
-    border-left: 5px solid var(--accent);
-    padding-left: .75rem;
-    margin: 2.5rem 0 1rem;
+}
+
+.masthead-deck {
+  color: #e8e3d8;
+  font-weight: 300;
+  font-size: clamp(0.92rem, 1.8vw, 1.08rem);
+  line-height: 1.7;
+  max-width: 720px;
+  margin: 0 0 20px;
+}
+
+.masthead-dateline {
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+  border-top: 1px solid var(--navy-rule);
+  padding-top: 10px;
+  font-size: 0.77rem;
+  color: #c9c4b8;
+  flex-wrap: wrap;
+}
+
+.masthead-dateline .dl-item {
+  padding-right: 16px;
+  margin-right: 16px;
+  border-right: 1px solid var(--navy-rule);
+  line-height: 1.5;
+}
+
+.masthead-dateline .dl-item:last-child {
+  border-right: none;
+  margin-right: 0;
+  padding-right: 0;
+}
+
+/* ===== MAIN CONTENT ===== */
+main { padding-block: 0 3rem; }
+
+/* ===== LEDE / VERDICT ===== */
+.lede-section {
+  padding-block: 48px 44px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.lede-inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+@media (min-width: 960px) {
+  .lede-inner {
+    grid-template-columns: minmax(0, 600px) 1fr;
+    gap: 48px;
   }
-  h3 { font-size: 1.1rem; margin: 1.8rem 0 .6rem; color: #2d2d4e; }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 1.25rem 1.5rem;
-    margin: 1rem 0;
-    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+}
+
+.lede-kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.kicker-bar {
+  display: block;
+  width: 30px;
+  height: 3px;
+  background: var(--redline);
+  flex-shrink: 0;
+}
+
+.kicker-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--redline);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.lede-statement {
+  font-family: var(--serif);
+  font-size: clamp(1.55rem, 3.6vw, 2.6rem);
+  line-height: 1.3;
+  color: var(--ink);
+  margin: 0 0 18px;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+}
+
+.lede-body {
+  font-size: 1rem;
+  line-height: 1.85;
+  color: var(--body);
+  margin: 0;
+  max-width: 65ch;
+}
+
+.lede-body .tight-word { color: var(--redline); font-weight: 600; }
+.lede-body .loose-word { color: var(--green); font-weight: 600; }
+.lede-body .emphasis { font-weight: 700; }
+
+.lede-figures {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+  border-top: 1px solid var(--rule);
+  padding-top: 24px;
+  border-left: none;
+  padding-left: 0;
+}
+
+@media (min-width: 960px) {
+  .lede-figures {
+    flex-direction: column;
+    border-left: 1px solid var(--rule);
+    padding-left: 32px;
+    border-top: none;
+    padding-top: 0;
+    gap: 0;
   }
-  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .92rem; background: var(--card); }
-  th, td { border: 1px solid var(--line); padding: .55rem .75rem; text-align: left; vertical-align: top; }
-  th { background: #f0ece4; font-weight: 600; }
-  tr:nth-child(even) td { background: #fbfaf7; }
-  .bignum { font-size: 2rem; font-weight: 700; color: var(--accent); }
-  .statgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1.2rem 0; }
-  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem 1.2rem; text-align: center; }
-  .stat .label { font-size: .85rem; color: #6b6557; }
-  .bar { display: flex; height: 30px; border-radius: 6px; overflow: hidden; margin: .8rem 0 .3rem; font-size: .78rem; color: #fff; }
-  .bar div { display: flex; align-items: center; justify-content: center; white-space: nowrap; overflow: hidden; }
-  .b-swc { background: var(--gold); }
-  .b-sup { background: var(--green); }
-  .b-opp { background: var(--red); }
-  .b-unc { background: #8a8578; }
-  .legend { font-size: .82rem; color: #6b6557; }
-  .legend span { display: inline-block; margin-right: 1rem; }
-  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: .3rem; }
-  .pos { color: var(--green); font-weight: 600; }
-  .neg { color: var(--red); font-weight: 600; }
-  .mid { color: var(--amber); font-weight: 600; }
-  blockquote {
-    border-left: 4px solid var(--gold);
-    background: #fdf9ee;
-    margin: .8rem 0;
-    padding: .6rem 1rem;
-    font-size: .95rem;
-    border-radius: 0 8px 8px 0;
+}
+
+.figure-row {
+  flex: 1 1 120px;
+  border-top: none;
+  padding-block: 0;
+}
+
+@media (min-width: 960px) {
+  .figure-row {
+    flex: unset;
+    border-top: 1px solid var(--rule);
+    padding-block: 18px;
   }
-  blockquote cite { display: block; font-style: normal; font-size: .8rem; color: #8a8578; margin-top: .3rem; }
-  .tag { display: inline-block; font-size: .75rem; padding: .1rem .55rem; border-radius: 99px; margin-right: .35rem; }
-  .tag-loosen { background: #e8f3ec; color: var(--green); border: 1px solid #bfdcc9; }
-  .tag-tighten { background: #f9e9e6; color: var(--red); border: 1px solid #e8c3bc; }
-  .tag-redesign { background: #fdf3dc; color: var(--gold); border: 1px solid #ecd9a8; }
-  footer { font-size: .8rem; color: #8a8578; border-top: 1px solid var(--line); margin-top: 3rem; padding-top: 1rem; }
-  a { color: var(--accent); }
+  .figure-row:first-child { border-top: none; padding-top: 0; }
+}
+
+.figure-num {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  line-height: 1.0;
+  letter-spacing: -0.01em;
+}
+
+.figure-num.redline { color: var(--redline); }
+.figure-num.ink { color: var(--ink); }
+.figure-num.plain { color: var(--ink); font-size: clamp(1.5rem, 3vw, 2.2rem); }
+
+.figure-label {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.45;
+  margin-top: 2px;
+}
+
+/* ===== SECTION HEADS ===== */
+.section-head {
+  margin: 52px 0 32px;
+  border-top: 2px solid var(--ink);
+  padding-top: 14px;
+}
+
+.section-head-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.section-num {
+  font-family: var(--serif);
+  font-size: clamp(1.35rem, 2.6vw, 1.9rem);
+  color: var(--redline);
+  font-weight: 400;
+  line-height: 1.2;
+  flex-shrink: 0;
+  letter-spacing: 0.01em;
+}
+
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(1.35rem, 2.6vw, 1.9rem);
+  color: var(--ink);
+  font-weight: 400;
+  line-height: 1.2;
+  flex: 1;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+  margin: 0;
+}
+
+.section-meta {
+  font-size: 0.77rem;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+/* ===== STANCE BAR ===== */
+.stance-bar-wrap { margin: 0 0 8px; }
+
+.stance-bar {
+  display: flex;
+  height: 48px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.stance-bar .seg {
+  display: flex;
+  align-items: center;
+  padding-inline: 14px;
+  font-size: 0.82rem;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  font-weight: 500;
+}
+
+.seg-swc .seg-label { color: var(--ink); }
+
+.seg-swc { background: var(--gold); width: 83%; }
+.seg-sup { background: var(--green); width: 7%; }
+.seg-opp { background: var(--redline); width: 6%; }
+.seg-unc { background: var(--faint); width: 4%; }
+
+@media (max-width: 600px) {
+  .seg-swc .seg-label { display: none; }
+  .seg-swc .seg-label-short { display: inline; }
+}
+
+.stance-legend {
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  margin-top: 10px;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 14px;
+  border-top: 1px solid var(--rule);
+  font-size: 0.85rem;
+}
+
+.legend-row:first-child { border-top: none; }
+
+.swatch {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.legend-label {
+  font-weight: 600;
+  min-width: 200px;
+  color: var(--ink);
+}
+
+@media (max-width: 600px) {
+  .legend-label { min-width: 0; }
+}
+
+.legend-desc {
+  flex: 1;
+  color: var(--body);
+  font-size: 0.82rem;
+}
+
+.legend-count {
+  font-family: var(--serif);
+  font-size: 1.0rem;
+  color: var(--ink);
+  text-align: right;
+  min-width: 50px;
+  flex-shrink: 0;
+}
+
+/* ===== TABLES ===== */
+.scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  background: var(--card);
+}
+
+.arg-table { min-width: 560px; }
+.pos-table { min-width: 640px; }
+
+th, td {
+  border: 1px solid var(--rule);
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: var(--header-tint);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+tr:nth-child(even) td { background: var(--row-tint); }
+
+/* ===== TAGS ===== */
+.tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 0.1rem 0.55rem;
+  border-radius: 99px;
+  margin-right: 0.35rem;
+  white-space: nowrap;
+}
+
+.tag-loosen {
+  background: #e8f3ec;
+  color: var(--green);
+  border: 1px solid #bfdcc9;
+}
+
+.tag-tighten {
+  background: #f9e9e6;
+  color: var(--redline);
+  border: 1px solid #e8c3bc;
+}
+
+.tag-redesign {
+  background: #fdf3dc;
+  color: var(--gold-text);
+  border: 1px solid #ecd9a8;
+}
+
+/* ===== CARDS ===== */
+.card {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 30px 34px;
+  margin: 16px 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  transition: border-color 0.18s cubic-bezier(.2,1,.3,1), box-shadow 0.18s cubic-bezier(.2,1,.3,1);
+}
+
+.card:hover {
+  border-color: var(--rule-2);
+  box-shadow: 0 2px 6px rgba(0,0,0,.06);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--rule-2);
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.card-org { font-size: 1.15rem; font-weight: 700; color: var(--ink); }
+.card-meta { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+.card-tags { display: flex; gap: 4px; flex-wrap: wrap; flex-shrink: 0; }
+
+.card ul {
+  margin: 0;
+  padding-left: 1.4em;
+  color: var(--body);
+}
+
+.card ul li { margin-bottom: 6px; }
+.card ul li:last-child { margin-bottom: 0; }
+
+/* ===== SUBHEADS ===== */
+.group-head {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  color: var(--ink-2);
+  margin-bottom: 14px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+/* ===== QUOTES ===== */
+.pullquote-feature {
+  margin: 32px 0;
+  background: var(--quote-tint);
+  border-radius: 8px;
+  padding: 28px 32px;
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.pullquote-feature .pq-mark {
+  font-family: var(--serif);
+  font-size: 3.2rem;
+  color: var(--redline);
+  line-height: 0.8;
+  flex-shrink: 0;
+  margin-top: 4px;
+  user-select: none;
+}
+
+.pullquote-feature .pq-body { flex: 1; }
+
+.pullquote-feature blockquote {
+  font-family: var(--serif);
+  font-size: 1.12rem;
+  line-height: 1.65;
+  color: var(--ink);
+  margin: 0 0 10px;
+  letter-spacing: 0.01em;
+}
+
+.pullquote-feature cite {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-style: normal;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.cite-rule {
+  display: block;
+  width: 20px;
+  height: 1.5px;
+  background: var(--redline);
+  flex-shrink: 0;
+}
+
+.cite-name { color: var(--redline); font-weight: 600; }
+.cite-ref { color: var(--muted); }
+
+.quotes-block { margin: 20px 0; display: flex; flex-direction: column; gap: 14px; }
+
+.quote-item {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 16px 20px 16px 52px;
+  position: relative;
+}
+
+.quote-item::before {
+  content: '\201C';
+  font-family: var(--serif);
+  font-size: 1.8rem;
+  color: var(--redline);
+  opacity: 0.5;
+  position: absolute;
+  left: 16px;
+  top: 12px;
+  line-height: 1;
+}
+
+.quote-item p {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+  color: var(--body);
+  line-height: 1.7;
+}
+
+.quote-item cite {
+  font-style: normal;
+  font-size: 0.78rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quote-item cite .cite-name { color: var(--redline); font-weight: 600; font-size: 0.8rem; }
+.quote-item.opposing { border-color: var(--muted); background: #f8f6f2; }
+.quote-item .opp-label {
+  font-size: 0.72rem;
+  background: #f0ede8;
+  color: var(--muted);
+  border-radius: 4px;
+  padding: 1px 6px;
+  margin-left: 6px;
+}
+
+/* ===== FEATURED SUBMISSION ===== */
+.featured-submission {
+  margin: 32px 0 0;
+  border: 1px solid var(--rule);
+  border-top: 4px solid var(--redline);
+  border-radius: 0 0 8px 8px;
+  background: var(--card);
+  padding: 24px 28px 20px;
+}
+
+.featured-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--redline);
+  letter-spacing: 0.07em;
+  background: #fae9e7;
+  border: 1px solid #e8c3bc;
+  border-radius: 4px;
+  padding: 2px 8px;
+  margin-bottom: 12px;
+}
+
+.featured-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+
+.featured-media-note {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-bottom: 18px;
+  font-style: italic;
+}
+
+.viral-text {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  line-height: 2.0;
+  color: var(--ink);
+  margin: 0 0 10px;
+  padding: 16px 20px;
+  background: #f7f4f0;
+  border-radius: 4px;
+  letter-spacing: 0.01em;
+}
+
+.redact {
+  display: inline-block;
+  background: var(--ink);
+  color: transparent;
+  width: 0.9em;
+  height: 0.85em;
+  vertical-align: -0.1em;
+  user-select: none;
+  border-radius: 1px;
+}
+
+.featured-footnote {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  font-style: italic;
+  margin: 6px 0 14px;
+}
+
+.featured-cite {
+  font-size: 0.82rem;
+  color: var(--muted);
+  border-top: 1px solid var(--rule);
+  padding-top: 10px;
+  margin-top: 10px;
+}
+
+.featured-cite .cite-name { color: var(--redline); font-weight: 600; }
+
+/* ===== SUMMARY CARD ===== */
+.summary-card {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 30px 34px;
+  margin: 24px 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+}
+
+.summary-card h3 {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  color: var(--ink);
+  margin: 0 0 14px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.summary-card p { color: var(--body); margin: 0 0 12px; max-width: 70ch; }
+.summary-card ul { padding-left: 1.4em; color: var(--body); margin: 0; }
+.summary-card ul li { margin-bottom: 8px; max-width: 70ch; }
+.summary-card ul li:last-child { margin-bottom: 0; }
+
+/* ===== DARK FEATURE PANEL ===== */
+.feature-panel {
+  background: var(--ink);
+  border-radius: 4px;
+  padding: 46px 52px;
+  margin: 32px 0;
+  color: #fff;
+}
+
+@media (max-width: 600px) {
+  .feature-panel { padding: 28px 22px; }
+  .card { padding: 20px 18px; }
+  .pullquote-feature { padding: 20px 18px; }
+  .featured-submission { padding: 18px 16px 14px; }
+  .summary-card { padding: 20px 18px; }
+}
+
+.feature-panel .fp-kicker {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--redline-on-dark);
+  margin-bottom: 12px;
+}
+
+.feature-panel .fp-title {
+  font-family: var(--serif);
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  color: #fff;
+  font-weight: 400;
+  margin: 0 0 16px;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+}
+
+.feature-panel .fp-deck {
+  font-size: 0.95rem;
+  color: #c9c4b8;
+  line-height: 1.75;
+  max-width: 640px;
+  margin-bottom: 32px;
+}
+
+.feature-panel .fp-deck em { color: #fff; font-style: normal; }
+
+/* CROSS-HOLDING MATRIX */
+.matrix-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 0 24px;
+}
+
+.cross-matrix {
+  min-width: 640px;
+  width: 100%;
+  border-collapse: collapse;
+  background: transparent;  /* override global table white bg so the navy panel shows through */
+}
+
+.cross-matrix .matrix-header th {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--navy-line);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #fff;
+  padding: 8px 14px;
+  text-align: center;
+}
+
+.cross-matrix .matrix-header th:first-child {
+  text-align: left;
+  color: #9a9486;  /* on-navy axis label — matches person-role tone, 5.65:1 */
+  font-size: 0.77rem;
+  font-weight: 400;
+  max-width: 180px;
+}
+
+.cross-matrix .person-row td {
+  border: none;
+  border-top: 1px solid var(--navy-line);
+  padding: 14px;
+  vertical-align: middle;
+}
+
+.cross-matrix .person-row:first-child td { border-top: none; }
+
+.person-cell { min-width: 180px; }
+.person-name { font-size: 0.92rem; color: #fff; font-weight: 600; line-height: 1.3; }
+.person-role { font-size: 0.77rem; color: #9a9486; line-height: 1.4; margin-top: 2px; }
+
+.marker-cell { text-align: center; vertical-align: middle; }
+
+.marker-filled {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--redline-on-dark);
+}
+
+.marker-outline {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold);
+  background: transparent;
+}
+
+.marker-none {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #3a3a52;
+}
+
+.matrix-legend {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 0.78rem;
+  color: #9a9486;
+  border-top: 1px solid var(--navy-line);
+  padding-top: 16px;
+  margin-top: 4px;
+}
+
+.matrix-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.matrix-legend-note {
+  margin-left: auto;
+  text-align: right;
+  font-style: italic;
+  color: #9a9486;
+}
+
+@media (max-width: 600px) {
+  .matrix-legend-note { margin-left: 0; text-align: left; }
+}
+
+@media (max-width: 600px) {
+  /* Stacked cross-holding matrix (overrides desktop rules above) */
+  .person-cell { min-width: 0; }
+  .matrix-wrap{overflow:visible;position:static;}
+  .matrix-wrap::after{display:none;}
+  .matrix-scroll-hint{display:none !important;}
+  .cross-matrix{min-width:0 !important;}
+  .cross-matrix thead{display:none;}
+  .cross-matrix,.cross-matrix tbody,.cross-matrix .person-row,.cross-matrix td{display:block;width:100%;}
+  .cross-matrix .person-row{border:1px solid var(--navy-line);border-radius:6px;padding:14px 16px;margin-bottom:12px;}
+  .cross-matrix .person-row td{border:none;padding:0;}
+  .cross-matrix .person-cell{margin-bottom:8px;}
+  .cross-matrix .marker-cell{display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;padding:7px 0;border-top:1px solid var(--navy-line);}
+  .cross-matrix .marker-cell::before{content:attr(data-label);color:#c9c4b8;font-size:0.82rem;}
+}
+
+.matrix-scroll-hint {
+  display: none;
+  font-style: italic;
+  font-size: 0.78rem;
+  color: #9a9486;
+  margin-bottom: 8px;
+}
+
+/* Supporting prose in dark panel */
+.feature-panel .fp-prose {
+  border-top: 1px solid var(--navy-line);
+  padding-top: 28px;
+  margin-top: 8px;
+}
+
+.feature-panel .fp-prose h4 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--faint);
+  margin: 0 0 16px;
+}
+
+.feature-panel .fp-prose ul {
+  padding-left: 1.4em;
+  color: #c9c4b8;
+  font-size: 0.92rem;
+  line-height: 1.75;
+  margin: 0;
+}
+
+.feature-panel .fp-prose ul li { margin-bottom: 10px; }
+.feature-panel .fp-prose ul li:last-child { margin-bottom: 0; }
+.feature-panel .fp-prose ul strong { color: #fff; }
+
+/* ===== PROSE ===== */
+p { margin: 0 0 1em; max-width: 70ch; color: var(--body); }
+p:last-child { margin-bottom: 0; }
+
+.pos { color: var(--green); font-weight: 600; }
+.neg { color: var(--redline); font-weight: 600; }
+.mid { color: var(--gold-text); font-weight: 600; }
+
+/* ===== FOOTER ===== */
+footer {
+  font-size: 0.8rem;
+  color: var(--muted);
+  border-top: 2px solid var(--ink);
+  margin-top: 3rem;
+  padding-top: 20px;
+  line-height: 1.7;
+}
+
+footer .footer-label {
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+footer p { max-width: none; color: var(--muted); font-size: 0.8rem; }
+
+/* ===== LINKS ===== */
+a { color: var(--redline); transition: opacity 0.14s; }
+a:hover { opacity: 0.75; }
+a:focus-visible { outline: 2px solid var(--redline); outline-offset: 2px; border-radius: 2px; }
+
+/* ===== SECTION CONTENT PAD ===== */
+.section-body { padding-bottom: 12px; }
+
+/* ===== GROUP H3 ===== */
+.group-head-sub {
+  margin: 32px 0 12px;
+  font-size: 1.0rem;
+  font-weight: 700;
+  color: var(--ink-2);
+}
+
+/* ===== SR-ONLY ===== */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+
+/* ===== SECTION HEAD SCROLL MARGIN ===== */
+.section-head{ scroll-margin-top:16px; }
+
+/* ===== MASTHEAD NAV ===== */
+.masthead-nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:16px;padding-top:14px;border-top:1px solid var(--navy-rule);}
+.masthead-nav a{color:#c9c4b8;font-size:0.82rem;text-decoration:none;transition:color .14s cubic-bezier(.2,1,.3,1);}
+.masthead-nav a:hover{color:var(--redline-on-dark);}
+.masthead-nav a:focus-visible{outline:2px solid var(--redline-on-dark);outline-offset:2px;border-radius:2px;}
+
+/* ===== LEDE TEASER ===== */
+.lede-teaser{margin:18px 0 0;}
+.lede-teaser a{color:var(--redline);font-weight:600;font-size:0.95rem;text-decoration:none;border-bottom:1px solid transparent;transition:border-color .15s cubic-bezier(.2,1,.3,1);}
+.lede-teaser a:hover{border-bottom-color:currentColor;}
+
+/* ===== BACK TO TOP ===== */
+.to-top{color:var(--muted);font-size:0.8rem;text-decoration:none;}
+.to-top:hover{color:var(--redline);}
+
+/* ===== TAG KEY / LEGEND ===== */
+.tag-key{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:0.82rem;color:var(--muted);margin:0 0 18px;}
+
+/* ===== GROUP HEAD RHYTHM ===== */
+.group-head{border-top:1px solid var(--rule);padding-top:28px;margin-top:40px;}
+.section-body > .group-head:first-child,.section-body > .group-head:first-of-type{border-top:none;padding-top:0;margin-top:8px;}
+
+/* ===== STANCE BAR SHORT LABEL ===== */
+.seg-label-short{display:none;color:var(--ink);font-weight:600;}
+
+/* ===== PRINT / REDUCED MOTION ===== */
+@media print {
+  header.masthead { background: #1a1a2e !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .feature-panel { background: #1a1a2e !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
 </style>
 </head>
 <body>
 
-<header class="hero">
+<!-- ===== MASTHEAD ===== -->
+<header id="top" class="masthead" role="banner">
   <div class="wrap">
-    <h1>網約車附屬法例 意見書分析報告</h1>
-    <div class="sub">立法會 與規管網約車服務有關的4項附屬法例小組委員會（sc103）</div>
-    <div class="meta">
-      資料截至 2026年6月10日上載文件 ｜ 提交意見書限期：2026年6月15日下午5時（仍接受提交）<br>
-      涵蓋範圍：7 份團體／機構意見書 + 423 份公眾人士意見書（CB(3)662/2026(03)–(427)）；另有 27 份「只限委員參閱」未能分析
+    <div class="masthead-edition">
+      <span class="source-label">立法會 · 與規管網約車服務有關的 4 項附屬法例小組委員會（sc103）</span>
+      <span class="report-type">意見書分析</span>
     </div>
+
+    <h1 class="masthead-title">網約車附屬法例<br>意見書分析報告</h1>
+
+    <p class="masthead-deck">誰贊成、誰反對、誰在背後？逐份拆解 430 份公眾及團體意見書，還原這場規管之爭的真正分歧。</p>
+
+    <div class="masthead-dateline" aria-label="資料截止日期及報告資訊">
+      <span class="dl-item">資料截至 2026年6月10日上載文件</span>
+      <span class="dl-item">提交限期 2026年6月15日 17:00（仍接受提交）</span>
+      <span class="dl-item">報告生成 2026年6月11日</span>
+    </div>
+    <nav class="masthead-nav" aria-label="章節導覽"><a href="#s1">一　整體立場</a><a href="#s2">二　持份者</a><a href="#s3">三　取態總表</a><a href="#s4">四　背景調查</a></nav>
   </div>
 </header>
 
+<!-- ===== MAIN ===== -->
+<main>
+
+<!-- ===== LEDE / VERDICT ===== -->
+<section class="lede-section" aria-label="核心發現">
+  <div class="wrap">
+    <div class="lede-inner">
+      <div class="lede-left">
+        <div class="lede-kicker">
+          <span class="kicker-bar" aria-hidden="true"></span>
+          <span class="kicker-label">核心發現</span>
+        </div>
+
+        <p class="lede-statement">幾乎無人反對規管網約車。真正的戰場，是「鬆」還是「緊」。</p>
+
+        <p class="lede-body">
+          約九成意見書原則上贊成將網約車納入規管，分歧只在力度。的士業界三大團體嫌方案<span class="tight-word">太鬆</span>，要求收緊工時、年費與車費下限；平台、智庫與絕大多數市民則嫌<span class="loose-word">太緊</span>，矛頭直指<span class="emphasis"> 1 萬個車輛許可證上限</span>。
+        </p>
+        <p class="lede-teaser"><a href="#s4">的士業界三份「獨立」意見書，背後是同一個車主圈子 →</a></p>
+      </div>
+
+      <div class="lede-figures" aria-label="核心數字">
+        <div class="figure-row">
+          <div class="figure-num redline">≈90%</div>
+          <div class="figure-label">原則上贊成規管網約車</div>
+        </div>
+        <div class="figure-row">
+          <div class="figure-num ink">≈76%</div>
+          <div class="figure-label">認為 1 萬個牌額太少</div>
+        </div>
+        <div class="figure-row">
+          <div class="figure-num plain">430 <span style="font-size:1rem;font-family:var(--sans);color:var(--muted)">份</span></div>
+          <div class="figure-label">意見書（423 公眾 + 7 團體）</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 第一部分 ===== -->
 <div class="wrap">
 
-<!-- ============ 第一部分 ============ -->
-<h2>一、整體立場：贊成定反對？</h2>
-
-<div class="statgrid">
-  <div class="stat"><div class="bignum">423</div><div class="label">已分析公眾意見書</div></div>
-  <div class="stat"><div class="bignum">~90%</div><div class="label">原則上贊成規管網約車</div></div>
-  <div class="stat"><div class="bignum">~76%</div><div class="label">認為 1 萬個牌額太少</div></div>
-  <div class="stat"><div class="bignum">7</div><div class="label">團體／機構意見書</div></div>
-</div>
-
-<div class="card">
-  <h3 style="margin-top:0">公眾人士意見書立場分佈（n = 423）</h3>
-  <div class="bar">
-    <div class="b-swc" style="width:83%">贊成規管，但反對個別條文 83%</div>
-    <div class="b-sup" style="width:7%">7%</div>
-    <div class="b-opp" style="width:6%">6%</div>
-    <div class="b-unc" style="width:4%"></div>
+  <div id="s1" class="section-head">
+    <div class="section-head-inner">
+      <span class="section-num" aria-hidden="true">一</span>
+      <h2 class="section-title"><span class="sr-only">第一部分 · </span>整體立場：贊成定反對？</h2>
+      <span class="section-meta">公眾意見書 n = 423</span>
+    </div>
   </div>
-  <div class="legend">
-    <span><span class="dot" style="background:var(--gold)"></span>贊成規管但反對個別條文（352 份，主要針對 1 萬個牌額）</span>
-    <span><span class="dot" style="background:var(--green)"></span>全面支持建議方案（28 份）</span>
-    <span><span class="dot" style="background:var(--red)"></span>反對整個規管制度（24 份）</span>
-    <span><span class="dot" style="background:#8a8578"></span>立場不明（19 份）</span>
+
+  <div class="section-body">
+
+    <!-- Stance bar -->
+    <div class="stance-bar-wrap" role="img" aria-label="公眾意見書立場分佈">
+      <div class="stance-bar">
+        <div class="seg seg-swc" style="width:83%">
+          <span class="seg-label">贊成規管，但反對個別條文　83%</span><span class="seg-label-short">83%</span>
+        </div>
+        <div class="seg seg-sup" style="width:7%"></div>
+        <div class="seg seg-opp" style="width:6%"></div>
+        <div class="seg seg-unc" style="width:4%"></div>
+      </div>
+
+      <div class="stance-legend" aria-label="圖例">
+        <div class="legend-row">
+          <span class="swatch" style="background:var(--gold)" aria-hidden="true"></span>
+          <span class="legend-label">贊成規管但反對個別條文</span>
+          <span class="legend-desc">主要針對 1 萬個牌額</span>
+          <span class="legend-count">352</span>
+        </div>
+        <div class="legend-row">
+          <span class="swatch" style="background:var(--green)" aria-hidden="true"></span>
+          <span class="legend-label">全面支持建議方案</span>
+          <span class="legend-desc"></span>
+          <span class="legend-count">28</span>
+        </div>
+        <div class="legend-row">
+          <span class="swatch" style="background:var(--redline)" aria-hidden="true"></span>
+          <span class="legend-label">反對整個規管制度</span>
+          <span class="legend-desc"></span>
+          <span class="legend-count">24</span>
+        </div>
+        <div class="legend-row">
+          <span class="swatch" style="background:var(--faint)" aria-hidden="true"></span>
+          <span class="legend-label">立場不明</span>
+          <span class="legend-desc"></span>
+          <span class="legend-count">19</span>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:.92rem;margin-top:14px;">423 份之中，<strong>約 323 份（76%）認為 10,000 個車輛許可證上限不夠用</strong>：大多數要求加至 20,000 至 30,000 個（個別由 15,000 至 300,000 不等），另有約 60 份主張索性取消上限，由市場決定供應。《明報》報道「約六成挺1萬牌太少」，方向一致，只是報章計算口徑較保守。</p>
+
+    <!-- Argument table -->
+    <h3 style="font-size:1rem;font-weight:700;color:var(--ink-2);margin:24px 0 10px;">公眾意見書反覆出現的論點（約數；一份意見書可涉及多項）</h3>
+
+    <div class="scroll-x">
+      <table class="arg-table">
+        <thead>
+          <tr>
+            <th scope="col">論點</th>
+            <th scope="col">約數</th>
+            <th scope="col">方向</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1 萬個牌額太少／應上調或取消上限</td><td>≈323</td><td><span class="tag tag-loosen">放寬</span></td></tr>
+          <tr><td>批評的士服務差（拒載、兜路、濫收車資、態度差、車齡老舊），以此力證網約車不可被扼殺</td><td>≈115</td><td><span class="tag tag-loosen">放寬</span></td></tr>
+          <tr><td>上限會令候車時間延長、車費飆升（動態加價），損害市民及旅客</td><td>≈100</td><td><span class="tag tag-loosen">放寬</span></td></tr>
+          <tr><td>配額制度是保護的士牌主／炒家既得利益（重蹈炒牌覆轍）</td><td>≈40</td><td><span class="tag tag-loosen">放寬</span></td></tr>
+          <tr><td>香港落後於內地、新加坡等地；損害國際形象及旅遊業</td><td>≈40</td><td><span class="tag tag-loosen">放寬</span></td></tr>
+          <tr><td>反對抽籤分配，應按經驗、活躍度、評分優先發牌</td><td>≈36</td><td><span class="tag tag-redesign">重新設計</span></td></tr>
+          <tr><td>司機生計：現有活躍司機 2 至 3 萬人，遠超牌額</td><td>≈35</td><td><span class="tag tag-loosen">放寬</span></td></tr>
+          <tr><td>要求透明、快速、有客觀指標的動態檢討機制</td><td>≈20</td><td><span class="tag tag-redesign">重新設計</span></td></tr>
+          <tr><td>保險負擔過重，應由平台統購或按程投保，而非司機個人商業保單</td><td>≈17</td><td><span class="tag tag-redesign">重新設計</span></td></tr>
+          <tr><td>反對以扣分紀錄拒絕發牌（「人誰無錯」；的士司機冇呢個要求）</td><td>≈10</td><td><span class="tag tag-loosen">放寬</span></td></tr>
+          <tr><td>車齡上限太苛刻（應以驗車代替車齡）</td><td>≈9</td><td><span class="tag tag-loosen">放寬</span></td></tr>
+          <tr><td>反對人車綁定／必須擁有車輛的規定</td><td>≈6</td><td><span class="tag tag-loosen">放寬</span></td></tr>
+          <tr><td>親的士少數派：保障的士生計、限制上線時數、設車費下限</td><td>≈10</td><td><span class="tag tag-tighten">收緊</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Feature pullquote -->
+    <div class="pullquote-feature" role="blockquote" aria-label="具代表性引述">
+      <span class="pq-mark" aria-hidden="true">&#x201C;</span>
+      <div class="pq-body">
+        <blockquote>為了維護少數牌照炒家的既得利益，而犧牲全港市民的出行選擇權，實屬本末倒置。</blockquote>
+        <cite>
+          <span class="cite-rule" aria-hidden="true"></span>
+          <span class="cite-name">公眾人士 韋曉</span>
+          <span class="cite-ref">CB(3)662/2026(308)</span>
+        </cite>
+      </div>
+    </div>
+
+    <!-- Other quotes -->
+    <h3 style="font-size:1rem;font-weight:700;color:var(--ink-2);margin:24px 0 10px;">具代表性的其他引述</h3>
+
+    <div class="quotes-block">
+      <div class="quote-item">
+        <p>「10000個牌太少，限制住數量就無咗網約車入行門檻低嘅原意。變咗第二個的士牌。」</p>
+        <cite>
+          <span class="cite-name">公眾人士 鍾偉康</span>
+          <span class="cite-ref">CB(3)662/2026(186)</span>
+        </cite>
+      </div>
+
+      <div class="quote-item">
+        <p>「強烈反對司機如有記分紀錄便拒絕發牌政策！人誰無錯！如果同樣政策施加在的士司機身上會怎樣？」</p>
+        <cite>
+          <span class="cite-name">公眾人士 黃浩坤</span>
+          <span class="cite-ref">CB(3)662/2026(04)</span>
+        </cite>
+      </div>
+
+      <div class="quote-item">
+        <p>「規管的目的是保障安全，不是限制服務。」</p>
+        <cite>
+          <span class="cite-name">公眾人士 HUANG Zoe</span>
+          <span class="cite-ref">CB(3)662/2026(290)</span>
+        </cite>
+      </div>
+
+      <div class="quote-item opposing">
+        <p>「若不作分流與規管，前線的士司機的收入將會遭到毀滅性打擊。」</p>
+        <cite>
+          <span class="cite-name">梁耀輝</span>
+          <span class="cite-ref">CB(3)662/2026(125)</span>
+          <span class="opp-label">反方意見</span>
+        </cite>
+      </div>
+
+      <div class="quote-item">
+        <p>「網約車的價格（車費）比的士貴，為何大家選擇貴的交通工具而不選的士？的士司機應自我檢討。」</p>
+        <cite>
+          <span class="cite-name">公眾人士 莫女士</span>
+          <span class="cite-ref">（獲《明報》報道）</span>
+        </cite>
+      </div>
+    </div>
+
+    <!-- Featured submission #351 -->
+    <div class="featured-submission" role="region" aria-label="最受注目的一份公眾意見書">
+      <div class="featured-tag" aria-label="明報 Emily 專欄報道">明報 Emily 專欄報道</div>
+      <div class="featured-label">最受注目的一份公眾意見書</div>
+      <p class="featured-media-note">此份意見書因措辭辛辣而獲《明報》Emily 專欄報道（2026年6月11日，「網約車意見書爆粗鬧的士　立會上載暫收430份　約六成指1萬牌太少」）。</p>
+
+      <div class="viral-text" lang="zh-Hant-HK">
+        我們知道你們在保住個<span class="redact" aria-label="遭黑框遮蓋的粗口字" role="img"></span>牌嘅牌價，<br>
+        你們也知道自己是在保住個<span class="redact" aria-label="遭黑框遮蓋的粗口字" role="img"></span>牌嘅牌價，<br>
+        你們也知道我們知道你們在保住個<span class="redact" aria-label="遭黑框遮蓋的粗口字" role="img"></span>牌嘅牌價，<br>
+        我們也知道你們知道我們知道你們在保住個<span class="redact" aria-label="遭黑框遮蓋的粗口字" role="img"></span>牌嘅牌價，<br>
+        但是你們依然在保住個<span class="redact" aria-label="遭黑框遮蓋的粗口字" role="img"></span>牌嘅牌價。
+      </div>
+      <p class="featured-footnote">〔原件中遭黑框遮蓋的粗口字〕</p>
+      <div class="featured-cite">
+        <span class="cite-name">公眾人士 CHENG Ching-wai</span>
+        <span style="color:var(--muted)"> · CB(3)662/2026(351)</span>
+      </div>
+    </div>
+
+  </div><!-- /section-body -->
+
+  <!-- ===== 第二部分 ===== -->
+  <div id="s2" class="section-head">
+    <div class="section-head-inner">
+      <span class="section-num" aria-hidden="true">二</span>
+      <h2 class="section-title"><span class="sr-only">第二部分 · </span>持份者分組及重點主張</h2>
+      <span class="section-meta">團體意見書 7 份</span>
+    </div>
   </div>
-  <p style="font-size:.92rem">423 份之中，<strong>約 323 份（76%）認為 10,000 個車輛許可證上限不夠用</strong>：大多數要求加至 20,000 至 30,000 個（個別由 15,000 至 300,000 不等），另有約 60 份主張索性取消上限，由市場決定供應。《明報》報道「約六成挺1萬牌太少」，方向一致，只是報章計算口徑較保守。</p>
-</div>
 
-<h3>公眾意見書反覆出現的論點（約數；一份意見書可涉及多項）</h3>
-<table>
-  <tr><th>論點</th><th>約數</th><th>方向</th></tr>
-  <tr><td>1 萬個牌額太少／應上調或取消上限</td><td>≈323</td><td><span class="tag tag-loosen">放寬</span></td></tr>
-  <tr><td>批評的士服務差（拒載、兜路、濫收車資、態度差、車齡老舊），以此力證網約車不可被扼殺</td><td>≈115</td><td><span class="tag tag-loosen">放寬</span></td></tr>
-  <tr><td>上限會令候車時間延長、車費飆升（動態加價），損害市民及旅客</td><td>≈100</td><td><span class="tag tag-loosen">放寬</span></td></tr>
-  <tr><td>配額制度是保護的士牌主／炒家既得利益（重蹈炒牌覆轍）</td><td>≈40</td><td><span class="tag tag-loosen">放寬</span></td></tr>
-  <tr><td>香港落後於內地、新加坡等地；損害國際形象及旅遊業</td><td>≈40</td><td><span class="tag tag-loosen">放寬</span></td></tr>
-  <tr><td>反對抽籤分配，應按經驗、活躍度、評分優先發牌</td><td>≈36</td><td><span class="tag tag-redesign">重新設計</span></td></tr>
-  <tr><td>司機生計：現有活躍司機 2 至 3 萬人，遠超牌額</td><td>≈35</td><td><span class="tag tag-loosen">放寬</span></td></tr>
-  <tr><td>要求透明、快速、有客觀指標的動態檢討機制</td><td>≈20</td><td><span class="tag tag-redesign">重新設計</span></td></tr>
-  <tr><td>保險負擔過重，應由平台統購或按程投保，而非司機個人商業保單</td><td>≈17</td><td><span class="tag tag-redesign">重新設計</span></td></tr>
-  <tr><td>反對以扣分紀錄拒絕發牌（「人誰無錯」；的士司機冇呢個要求）</td><td>≈10</td><td><span class="tag tag-loosen">放寬</span></td></tr>
-  <tr><td>車齡上限太苛刻（應以驗車代替車齡）</td><td>≈9</td><td><span class="tag tag-loosen">放寬</span></td></tr>
-  <tr><td>反對人車綁定／必須擁有車輛的規定</td><td>≈6</td><td><span class="tag tag-loosen">放寬</span></td></tr>
-  <tr><td>親的士少數派：保障的士生計、限制上線時數、設車費下限</td><td>≈10</td><td><span class="tag tag-tighten">收緊</span></td></tr>
-</table>
+  <div class="section-body">
 
-<div class="card">
-  <h3 style="margin-top:0">具代表性的引述</h3>
-  <blockquote>「為了維護少數牌照炒家的既得利益，而犧牲全港市民的出行選擇權，實屬本末倒置。」<cite>— 公眾人士 韋曉 [CB(3)662/2026(308)]</cite></blockquote>
-  <blockquote>「10000個牌太少，限制住數量就無咗網約車入行門檻低嘅原意。變咗第二個的士牌。」<cite>— 公眾人士 鍾偉康 [CB(3)662/2026(186)]</cite></blockquote>
-  <blockquote>「強烈反對司機如有記分紀錄便拒絕發牌政策！人誰無錯！如果同樣政策施加在的士司機身上會怎樣？」<cite>— 公眾人士 黃浩坤 [CB(3)662/2026(04)]</cite></blockquote>
-  <blockquote>「規管的目的是保障安全，不是限制服務。」<cite>— 公眾人士 HUANG Zoe [CB(3)662/2026(290)]</cite></blockquote>
-  <blockquote>「若不作分流與規管，前線的士司機的收入將會遭到毀滅性打擊。」<cite>— 反方意見：梁耀輝 [CB(3)662/2026(125)]</cite></blockquote>
-</div>
+    <p class="tag-key" aria-label="立場標籤圖例">標籤圖例：<span class="tag tag-loosen">放寬</span><span class="tag tag-tighten">收緊</span><span class="tag tag-redesign">重新設計</span></p>
 
-<!-- ============ 第二部分 ============ -->
-<h2>二、持份者分組及重點主張</h2>
+    <h3 class="group-head">甲・平台及網約車業界：<span class="pos">支持規管框架</span>，<span class="neg">反對關鍵細節</span>（要求放寬）</h3>
 
-<h3>甲・平台及網約車業界：<span class="pos">支持規管框架</span>，<span class="neg">反對關鍵細節</span>（要求放寬）</h3>
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-org">Uber 香港團隊</div>
+          <div class="card-meta">CB(3)634/2026(01)</div>
+        </div>
+        <div class="card-tags">
+          <span class="tag tag-loosen">放寬</span>
+          <span class="tag tag-redesign">重新設計</span>
+        </div>
+      </div>
+      <ul>
+        <li>歡迎規管框架，形容為「重要一步」。</li>
+        <li><strong>牌額：</strong>1 萬個許可證僅及其逾 3 萬名活躍司機的三分之一，逾 2 萬名現役司機將失去收入；促請在 2027 年 8 月全面實施前，利用過渡期數據盡快調整，<strong>至少每季檢討一次</strong>，並建議採用 P90（第90百分位數）指標及客觀觸發門檻。</li>
+        <li><strong>分配機制：</strong>優先發牌予有經驗、活躍的現有司機，抽籤只作最後輔助；以車輛擁有年期作優先準則的配額不應超過 20%（約四成司機並非以本人名義擁有座駕）。</li>
+        <li><strong>分階段發牌：</strong>先臨時分配名額，獲批後限期內（如 3 個月）才購車登記，免除「先購車、後獲證」的沉沒成本風險。</li>
+        <li><strong>保險：</strong>修訂或變通第 55T 條，容許平台統購「統括保險」，由平台核實保險而非在發牌階段審核。</li>
+      </ul>
+    </div>
 
-<div class="card">
-  <strong>Uber 香港團隊</strong> [CB(3)634/2026(01)]
-  <ul>
-    <li>歡迎規管框架，形容為「重要一步」。</li>
-    <li><strong>牌額：</strong>1 萬個許可證僅及其逾 3 萬名活躍司機的三分之一，逾 2 萬名現役司機將失去收入；促請在 2027 年 8 月全面實施前，利用過渡期數據盡快調整，<strong>至少每季檢討一次</strong>，並建議採用 P90（第90百分位數）指標及客觀觸發門檻。</li>
-    <li><strong>分配機制：</strong>優先發牌予有經驗、活躍的現有司機，抽籤只作最後輔助；以車輛擁有年期作優先準則的配額不應超過 20%（約四成司機並非以本人名義擁有座駕）。</li>
-    <li><strong>分階段發牌：</strong>先臨時分配名額，獲批後限期內（如 3 個月）才購車登記，免除「先購車、後獲證」的沉沒成本風險。</li>
-    <li><strong>保險：</strong>修訂或變通第 55T 條，容許平台統購「統括保險」，由平台核實保險而非在發牌階段審核。</li>
-  </ul>
-</div>
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-org">智慧交通聯盟</div>
+          <div class="card-meta">CB(3)662/2026(01)</div>
+        </div>
+        <div class="card-tags">
+          <span class="tag tag-loosen">放寬</span>
+        </div>
+      </div>
+      <ul>
+        <li>「全力支持」規管制度及「總量管控、動態評估」方針。</li>
+        <li>測算實際所需活躍車輛<strong>逾 15,200 輛</strong>，與 1 萬個牌額存在明顯運力缺口。</li>
+        <li>建議初期<strong>每 2 至 3 個月</strong>檢討一次運力（成熟後放緩至 6 至 12 個月），檢討報告公開供公眾監督。</li>
+        <li>支持為現有司機設發牌優先機制；以最低活躍時數淘汰閒置牌照；嚴禁牌照轉租及炒賣。</li>
+        <li>支持人車綁定及人臉辨識，但須嚴守《私隱條例》、限定用途、適時銷毀數據。</li>
+        <li>前瞻建議：另設「自動駕駛小類」試驗性先導牌照配額。</li>
+      </ul>
+    </div>
 
-<div class="card">
-  <strong>智慧交通聯盟</strong> [CB(3)662/2026(01)]
-  <ul>
-    <li>「全力支持」規管制度及「總量管控、動態評估」方針。</li>
-    <li>測算實際所需活躍車輛<strong>逾 15,200 輛</strong>，與 1 萬個牌額存在明顯運力缺口。</li>
-    <li>建議初期<strong>每 2 至 3 個月</strong>檢討一次運力（成熟後放緩至 6 至 12 個月），檢討報告公開供公眾監督。</li>
-    <li>支持為現有司機設發牌優先機制；以最低活躍時數淘汰閒置牌照；嚴禁牌照轉租及炒賣。</li>
-    <li>支持人車綁定及人臉辨識，但須嚴守《私隱條例》、限定用途、適時銷毀數據。</li>
-    <li>前瞻建議：另設「自動駕駛小類」試驗性先導牌照配額。</li>
-  </ul>
-</div>
+    <h3 class="group-head">乙・勞工團體：<span class="pos">歡迎合法化</span>，聚焦司機權益（要求加料）</h3>
 
-<h3>乙・勞工團體：<span class="pos">歡迎合法化</span>，聚焦司機權益（要求加料）</h3>
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-org">香港運輸物流業工會聯會（港運聯）</div>
+          <div class="card-meta">CB(3)641/2026(01)</div>
+        </div>
+        <div class="card-tags">
+          <span class="tag tag-redesign">重新設計</span>
+        </div>
+      </div>
+      <ul>
+        <li>「歡迎及支持」網約車合法化，結束法律灰色地帶。</li>
+        <li>理解 1 萬個牌額屬「穩妥試點起步」，但要求設<strong>發牌數量檢討機制及監管委員會</strong>，並嚴打炒賣牌照。</li>
+        <li>發牌應參考司機與平台的合作紀錄（工時、評分）優先發放；兼顧早晚高峰兼職司機。</li>
+        <li><strong>司機權益：</strong>平台抽佣 27–30% 構成壓力；要求立法工傷及退休保障；參考平台工作者立法，確立「獨立工作者」第三身份；平台統購第三者保險、提供法律支援。</li>
+        <li>統一及公開平台收費項目；增設網約車臨時停泊位及「休憩驛站」；設立勞、資、官三方協商平台。</li>
+      </ul>
+    </div>
 
-<div class="card">
-  <strong>香港運輸物流業工會聯會（港運聯）</strong> [CB(3)641/2026(01)]
-  <ul>
-    <li>「歡迎及支持」網約車合法化，結束法律灰色地帶。</li>
-    <li>理解 1 萬個牌額屬「穩妥試點起步」，但要求設<strong>發牌數量檢討機制及監管委員會</strong>，並嚴打炒賣牌照。</li>
-    <li>發牌應參考司機與平台的合作紀錄（工時、評分）優先發放；兼顧早晚高峰兼職司機。</li>
-    <li><strong>司機權益：</strong>平台抽佣 27–30% 構成壓力；要求立法工傷及退休保障；參考平台工作者立法，確立「獨立工作者」第三身份；平台統購第三者保險、提供法律支援。</li>
-    <li>統一及公開平台收費項目；增設網約車臨時停泊位及「休憩驛站」；設立勞、資、官三方協商平台。</li>
-  </ul>
-</div>
+    <h3 class="group-head">丙・的士業界：接受規管，但<span class="neg">嫌方案過鬆</span>（要求大幅收緊）</h3>
 
-<h3>丙・的士業界：接受規管，但<span class="neg">嫌方案過鬆</span>（要求大幅收緊）</h3>
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-org">的士車行車主協會</div>
+          <div class="card-meta">CB(3)634/2026(02)</div>
+        </div>
+        <div class="card-tags">
+          <span class="tag tag-tighten">收緊</span>
+        </div>
+      </div>
+      <ul>
+        <li>的士日均乘客量由高峰 130 萬人次跌至 66 萬；市面累積 400–500 個「死牌」。一次過放 1 萬個牌是「毀滅性打擊」。</li>
+        <li>原則：「保障合法的士權益、嚴格規範網約平台、嚴厲打擊白牌車」。</li>
+        <li><strong>要求：</strong>分批發牌、可加可減的動態調整（需求跌就減配額）；成立納入的士業界代表的監察委員會。</li>
+        <li><strong>提高網約車門檻：</strong>車齡限 3 年以下、車身標識、行車記錄儀、收費不得低於的士、商業登記及足額商用保險。</li>
+        <li><strong>嚴刑峻法：</strong>白牌車司機加設監禁及釘牌；違規車輛即場扣押、充公銷毀；平台按「每張非法訂單」處懲罰性罰款、設牌照扣分及吊銷機制、數據須存於香港並開放予執法部門。</li>
+      </ul>
+    </div>
 
-<div class="card">
-  <strong>的士車行車主協會</strong> [CB(3)634/2026(02)]
-  <ul>
-    <li>的士日均乘客量由高峰 130 萬人次跌至 66 萬；市面累積 400–500 個「死牌」。一次過放 1 萬個牌是「毀滅性打擊」。</li>
-    <li>原則：「保障合法的士權益、嚴格規範網約平台、嚴厲打擊白牌車」。</li>
-    <li><strong>要求：</strong>分批發牌、可加可減的動態調整（需求跌就減配額）；成立納入的士業界代表的監察委員會。</li>
-    <li><strong>提高網約車門檻：</strong>車齡限 3 年以下、車身標識、行車記錄儀、收費不得低於的士、商業登記及足額商用保險。</li>
-    <li><strong>嚴刑峻法：</strong>白牌車司機加設監禁及釘牌；違規車輛即場扣押、充公銷毀；平台按「每張非法訂單」處懲罰性罰款、設牌照扣分及吊銷機制、數據須存於香港並開放予執法部門。</li>
-  </ul>
-</div>
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-org">香港的士業議會</div>
+          <div class="card-meta">CB(3)641/2026(02)　掃描本，已以影像閱讀</div>
+        </div>
+        <div class="card-tags">
+          <span class="tag tag-tighten">收緊</span>
+        </div>
+      </div>
+      <ul>
+        <li>定位：「<strong>的士為主、網約車為輔</strong>」。支持合理規管，但認為現時細節未能消除業界憂慮。</li>
+        <li><strong>「小步快走」：</strong>由較小基數開始逐步發牌；質疑政府需求數據（源自平台單方面、有利益衝突）。</li>
+        <li><strong>限制每週上線時間不多於 20 小時</strong>，貫徹「兼職司機開網約車、全職司機開的士」的分工。</li>
+        <li>反對以乘客等候時間作調整依據（初期平台割喉戰必造成大量叫車、數據失真）；應由不同持份者組成檢討委員會。</li>
+        <li>消除保險與驗車待遇不公：網約車保費須真實反映營運風險、驗車須往政府指定中心；建立與的士互通的違規記分制度、強制安裝「三寶」監控設備；禁止以居民禁區紙經營點對點服務。</li>
+      </ul>
+    </div>
 
-<div class="card">
-  <strong>香港的士業議會</strong> [CB(3)641/2026(02)]（掃描本，已以影像閱讀）
-  <ul>
-    <li>定位：「<strong>的士為主、網約車為輔</strong>」。支持合理規管，但認為現時細節未能消除業界憂慮。</li>
-    <li><strong>「小步快走」：</strong>由較小基數開始逐步發牌；質疑政府需求數據（源自平台單方面、有利益衝突）。</li>
-    <li><strong>限制每週上線時間不多於 20 小時</strong>，貫徹「兼職司機開網約車、全職司機開的士」的分工。</li>
-    <li>反對以乘客等候時間作調整依據（初期平台割喉戰必造成大量叫車、數據失真）；應由不同持份者組成檢討委員會。</li>
-    <li>消除保險與驗車待遇不公：網約車保費須真實反映營運風險、驗車須往政府指定中心；建立與的士互通的違規記分制度、強制安裝「三寶」監控設備；禁止以居民禁區紙經營點對點服務。</li>
-  </ul>
-</div>
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-org">香港的士小巴商總會</div>
+          <div class="card-meta">CB(3)641/2026(03)修訂本　掃描本，已以影像閱讀</div>
+        </div>
+        <div class="card-tags">
+          <span class="tag tag-tighten">收緊</span>
+        </div>
+      </div>
+      <ul>
+        <li>指附屬法例有「四項重大缺失」：無法定工時上限、車輛許可證費過低、平台年費過低、車費監管真空。</li>
+        <li><strong>法定 20 小時硬上限：</strong>立法訂明每名司機每週跨平台上線總時數不得超過 20 小時，由<strong>政府中央伺服器</strong>統一累計及執行（附詳細技術方案）；超時者不予續證或暫時吊銷。</li>
+        <li><strong>平台年費：</strong>由 120 萬元上調至<strong>不少於 500 萬元</strong>，另按營業額抽取 1–2% 浮動費用（估算平台單日抽成收入已足以支付兩年年費）。</li>
+        <li><strong>法定最低車費：</strong>網約車每程車費不得低於同區的士咪錶收費，禁止補貼傾銷，車費計算方式須事前向乘客清晰顯示。</li>
+        <li>$1,560 許可證年費以兼職模式估算，若司機轉全職將無法收回公共成本。</li>
+      </ul>
+    </div>
 
-<div class="card">
-  <strong>香港的士小巴商總會</strong> [CB(3)641/2026(03)修訂本]（掃描本，已以影像閱讀）
-  <ul>
-    <li>指附屬法例有「四項重大缺失」：無法定工時上限、車輛許可證費過低、平台年費過低、車費監管真空。</li>
-    <li><strong>法定 20 小時硬上限：</strong>立法訂明每名司機每週跨平台上線總時數不得超過 20 小時，由<strong>政府中央伺服器</strong>統一累計及執行（附詳細技術方案）；超時者不予續證或暫時吊銷。</li>
-    <li><strong>平台年費：</strong>由 120 萬元上調至<strong>不少於 500 萬元</strong>，另按營業額抽取 1–2% 浮動費用（估算平台單日抽成收入已足以支付兩年年費）。</li>
-    <li><strong>法定最低車費：</strong>網約車每程車費不得低於同區的士咪錶收費，禁止補貼傾銷，車費計算方式須事前向乘客清晰顯示。</li>
-    <li>$1,560 許可證年費以兼職模式估算，若司機轉全職將無法收回公共成本。</li>
-  </ul>
-</div>
+    <h3 class="group-head">丁・民間／智庫式團體：<span class="pos">肯定合法化</span>，<span class="neg">否定配額機制</span></h3>
 
-<h3>丁・民間／智庫式團體：<span class="pos">肯定合法化</span>，<span class="neg">否定配額機制</span></h3>
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-org">香港文化教育聯合會</div>
+          <div class="card-meta">CB(3)662/2026(02)</div>
+        </div>
+        <div class="card-tags">
+          <span class="tag tag-redesign">重新設計</span>
+        </div>
+      </div>
+      <ul>
+        <li>充分肯定政府推動合法化的決心，但批評硬性配額「人為製造稀缺」，導致市場失靈、加價及候車延長；抽籤屬極低效的資源錯配，易生暗盤交易及尋租。</li>
+        <li>主張由「數量管控」轉向「<strong>質量管控</strong>」：取消配額上限，以高標準准入（車齡、培訓、守法紀錄、足額商業保險）作天然門檻。</li>
+        <li>強化發牌後監管：以平台數據及乘客評價建立扣分與停牌退出機制、落實平台連帶責任、要求共享脫敏交通數據。</li>
+      </ul>
+    </div>
 
-<div class="card">
-  <strong>香港文化教育聯合會</strong> [CB(3)662/2026(02)]
-  <ul>
-    <li>充分肯定政府推動合法化的決心，但批評硬性配額「人為製造稀缺」，導致市場失靈、加價及候車延長；抽籤屬極低效的資源錯配，易生暗盤交易及尋租。</li>
-    <li>主張由「數量管控」轉向「<strong>質量管控</strong>」：取消配額上限，以高標準准入（車齡、培訓、守法紀錄、足額商業保險）作天然門檻。</li>
-    <li>強化發牌後監管：以平台數據及乘客評價建立扣分與停牌退出機制、落實平台連帶責任、要求共享脫敏交通數據。</li>
-  </ul>
-</div>
+    <h3 class="group-head">戊・公眾人士（423 份）</h3>
 
-<h3>戊・公眾人士（423 份）</h3>
-<div class="card">
-  <ul>
-    <li><strong>乘客／一般市民：</strong>約 85–90%（包括相當數量以英文提交的外籍及少數族裔居民），普遍以的士服務差劣為由力撐網約車。</li>
-    <li><strong>網約車司機／有意入行者：</strong>約 25–30 名，聚焦牌額、扣分、保險、人車綁定及兼職彈性。</li>
-    <li><strong>親的士業界個人：</strong>約 5 名（要求工時上限、車費下限、保障的士生計）。</li>
-    <li>未有具名團體混入公眾批次（僅文教聯合會一份重複出現於批次中）。</li>
-  </ul>
-</div>
+    <div class="card">
+      <ul>
+        <li><strong>乘客／一般市民：</strong>約 85–90%（包括相當數量以英文提交的外籍及少數族裔居民），普遍以的士服務差劣為由力撐網約車。</li>
+        <li><strong>網約車司機／有意入行者：</strong>約 25–30 名，聚焦牌額、扣分、保險、人車綁定及兼職彈性。</li>
+        <li><strong>親的士業界個人：</strong>約 5 名（要求工時上限、車費下限、保障的士生計）。</li>
+        <li>未有具名團體混入公眾批次（僅文教聯合會一份重複出現於批次中）。</li>
+      </ul>
+    </div>
 
-<!-- ============ 第三部分 ============ -->
-<h2>三、對建議法例的正／負取態總表</h2>
+  </div><!-- /section-body -->
 
-<p>分兩個層面理解：(a) 是否贊成規管網約車；(b) 對<strong>現行草擬的 4 項附屬法例</strong>的取態。</p>
+  <!-- ===== 第三部分 ===== -->
+  <div id="s3" class="section-head">
+    <div class="section-head-inner">
+      <span class="section-num" aria-hidden="true">三</span>
+      <h2 class="section-title"><span class="sr-only">第三部分 · </span>對建議法例的正／負取態總表</h2>
+      <span class="section-meta">全部持份者</span>
+    </div>
+  </div>
 
-<table>
-  <tr>
-    <th>持份者</th>
-    <th>規管網約車本身</th>
-    <th>現行草擬條文</th>
-    <th>要求的修改方向</th>
-  </tr>
-  <tr>
-    <td>Uber 香港</td>
-    <td class="pos">正面 ✅</td>
-    <td class="neg">負面：牌額、抽籤、擁車要求、第55T條保險 ❌</td>
-    <td><span class="tag tag-loosen">放寬</span><span class="tag tag-redesign">重新設計</span></td>
-  </tr>
-  <tr>
-    <td>智慧交通聯盟</td>
-    <td class="pos">正面 ✅</td>
-    <td class="mid">部分負面：牌額不足 ⚠️</td>
-    <td><span class="tag tag-loosen">放寬</span>（加快動態檢討）</td>
-  </tr>
-  <tr>
-    <td>香港文化教育聯合會</td>
-    <td class="pos">正面 ✅</td>
-    <td class="neg">負面：反對配額+抽籤機制 ❌</td>
-    <td><span class="tag tag-redesign">以質代量</span></td>
-  </tr>
-  <tr>
-    <td>港運聯（工會）</td>
-    <td class="pos">正面 ✅</td>
-    <td class="mid">大致接受，要求增補 🟡</td>
-    <td><span class="tag tag-redesign">加入司機保障</span></td>
-  </tr>
-  <tr>
-    <td>的士車行車主協會</td>
-    <td class="pos">正面（要求更嚴）✅</td>
-    <td class="neg">負面：對網約車太寬鬆 ❌</td>
-    <td><span class="tag tag-tighten">大幅收緊</span></td>
-  </tr>
-  <tr>
-    <td>香港的士業議會</td>
-    <td class="pos">正面（要求更嚴）✅</td>
-    <td class="neg">負面：細節未保障的士 ❌</td>
-    <td><span class="tag tag-tighten">收緊</span>（20小時上限、待遇看齊）</td>
-  </tr>
-  <tr>
-    <td>的士小巴商總會</td>
-    <td class="pos">正面（要求更嚴）✅</td>
-    <td class="neg">負面：「四項重大缺失」❌</td>
-    <td><span class="tag tag-tighten">收緊</span>（工時、年費、車費下限）</td>
-  </tr>
-  <tr>
-    <td>公眾人士（n=423）</td>
-    <td class="pos">約九成正面 ✅</td>
-    <td class="neg">約 83% 反對個別條文（主要為牌額）❌</td>
-    <td><span class="tag tag-loosen">放寬</span>（上調／取消牌額）</td>
-  </tr>
-</table>
+  <div class="section-body">
 
-<div class="card" style="border-left:5px solid var(--accent)">
-  <h3 style="margin-top:0">總結</h3>
-  <p>幾乎無人質疑網約車應該合法化及納入規管。真正的爭議在<strong>鬆緊</strong>，而且兩邊拉的方向完全相反：</p>
-  <ul>
-    <li><strong>的士業界三大團體</strong>認為制度<strong>太鬆</strong>：牌額太多、年費太低、無工時上限、無車費下限，要求大幅收緊以落實「的士為主、網約為輔」。</li>
-    <li><strong>平台、智慧交通聯盟、文教聯合會及絕大多數公眾</strong>認為制度<strong>太緊</strong>：1 萬個牌額遠低於需求、抽籤分配不公、保險／擁車／扣分要求不切實際。</li>
-    <li><strong>工會</strong>居中，焦點在司機勞動保障而非牌額之爭。</li>
-  </ul>
-  <p>爭議最大的數字是 <strong>10,000 個許可證上限</strong>；其次是<strong>抽籤</strong>還是<strong>現有活躍司機優先</strong>的分配之爭。有趣的是，立場相反的 Uber 和的士小巴商總會，都要求政府訂立<strong>透明、客觀、有觸發門檻的動態檢討機制</strong>，分歧只在調整方向應該向上還是向下。</p>
-</div>
+    <p>分兩個層面理解：(a) 是否贊成規管網約車；(b) 對<strong>現行草擬的 4 項附屬法例</strong>的取態。</p>
 
-<!-- ============ 第四部分 ============ -->
-<h2>四、背景調查：提交意見書嘅係乜水？</h2>
+    <p class="tag-key" aria-label="立場標籤圖例">標籤圖例：<span class="tag tag-loosen">放寬</span><span class="tag tag-tighten">收緊</span><span class="tag tag-redesign">重新設計</span></p>
 
-<h3>甲・Uber 香港：12 年灰色地帶經營史</h3>
-<div class="card">
-  <ul>
-    <li><strong>2014 年</strong>登陸香港；<strong>2015 年 8 月</strong>警方搜查其辦公室並拘捕司機；2017–18 年多名司機被定罪（非法載客取酬、無第三者保險），終審法院 2020 年駁回上訴。<strong>2021 年 8 月收購本地 HKTaxi</strong> 應用程式。</li>
-    <li>自稱規模（2025–26）：過去 12 個月逾 <strong>30,000 人</strong>透過 Uber 賺取收入（約 15,000 人全職、51% 為唯一收入）；服務 250 萬港人及逾 100 萬旅客。</li>
-    <li>香港區總經理為<strong>鍾志霆（Estyn Chung）</strong>，約 2021–22 年起在任；口徑：「的士同網約車唔係敵人」、六成司機每週揸少於 20 小時。</li>
-    <li>遊說往績：2025 年 7 月提交意見要求<strong>不設上限或至少 30,000 個牌</strong>、車齡放寬至 15 年；2026 年 5 月由 Uber <strong>全球公共政策主管 Andrew Byrne</strong> 警告若牌額不足，車費或<strong>上漲約七成</strong>（迪士尼至灣仔 $250 → $430+）；CEO Khosrowshahi 2025 年 12 月亦親自開腔促請「反映營運現實的配額」。</li>
-  </ul>
-</div>
+    <div class="scroll-x">
+      <table class="pos-table">
+        <thead>
+          <tr>
+            <th scope="col">持份者</th>
+            <th scope="col">規管網約車本身</th>
+            <th scope="col">現行草擬條文</th>
+            <th scope="col">要求的修改方向</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Uber 香港</td>
+            <td class="pos">正面</td>
+            <td class="neg">負面：牌額、抽籤、擁車要求、第55T條保險</td>
+            <td><span class="tag tag-loosen">放寬</span><span class="tag tag-redesign">重新設計</span></td>
+          </tr>
+          <tr>
+            <td>智慧交通聯盟</td>
+            <td class="pos">正面</td>
+            <td class="mid">部分負面：牌額不足</td>
+            <td><span class="tag tag-loosen">放寬</span>（加快動態檢討）</td>
+          </tr>
+          <tr>
+            <td>香港文化教育聯合會</td>
+            <td class="pos">正面</td>
+            <td class="neg">負面：反對配額+抽籤機制</td>
+            <td><span class="tag tag-redesign">以質代量</span></td>
+          </tr>
+          <tr>
+            <td>港運聯（工會）</td>
+            <td class="pos">正面</td>
+            <td class="mid">大致接受，要求增補</td>
+            <td><span class="tag tag-redesign">加入司機保障</span></td>
+          </tr>
+          <tr>
+            <td>的士車行車主協會</td>
+            <td class="pos">正面（要求更嚴）</td>
+            <td class="neg">負面：對網約車太寬鬆</td>
+            <td><span class="tag tag-tighten">大幅收緊</span></td>
+          </tr>
+          <tr>
+            <td>香港的士業議會</td>
+            <td class="pos">正面（要求更嚴）</td>
+            <td class="neg">負面：細節未保障的士</td>
+            <td><span class="tag tag-tighten">收緊</span>（20小時上限、待遇看齊）</td>
+          </tr>
+          <tr>
+            <td>的士小巴商總會</td>
+            <td class="pos">正面（要求更嚴）</td>
+            <td class="neg">負面：「四項重大缺失」</td>
+            <td><span class="tag tag-tighten">收緊</span>（工時、年費、車費下限）</td>
+          </tr>
+          <tr>
+            <td>公眾人士（n=423）</td>
+            <td class="pos">約九成正面</td>
+            <td class="neg">約 83% 反對個別條文（主要為牌額）</td>
+            <td><span class="tag tag-loosen">放寬</span>（上調／取消牌額）</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-<h3>乙・智慧交通聯盟：建制系產業聯盟（非平台白手套）</h3>
-<div class="card">
-  <ul>
-    <li><strong>2026 年 3 月 14 日</strong>於數碼港成立。創會主席為立法會議員<strong>陳紹雄</strong>（工程界、中電出身）；理事長為<strong>張欣宇</strong>（前立法會議員〔新界北〕、港鐵工程師出身）。</li>
-    <li>創始機構成員包括<strong>機場管理局、港鐵公司、數碼港</strong>等，成立時焦點本為自動駕駛及智慧出行；運輸及物流局局長陳美寶有出席成立禮。性質上是<strong>建制系產業聯盟</strong>，不是民間倡議組織。</li>
-    <li>網約車立場往績：2026 年 5–6 月倡議首階段發 <strong>20,500 個牌</strong>（以每日 19 萬人次需求倒推需 ≥15,000 輛活躍網約車），警告「管了以後，無車可搭」；引用滬（2.6:1）、星（4.5:1）、深（5.9:1）的網約車對的士比例。</li>
-    <li><strong>查無平台資金關連</strong>：沒有報道指 Uber、滴滴、Tada、高德為其成員或金主；其 20,500 訴求亦與 Uber 的 30,000+ 並非同一口徑。惟完整成員及資金來源未有公開，未能完全核實。</li>
-  </ul>
-</div>
+    <div class="summary-card">
+      <h3>總結</h3>
+      <p>幾乎無人質疑網約車應該合法化及納入規管。真正的爭議在<strong>鬆緊</strong>，而且兩邊拉的方向完全相反：</p>
+      <ul>
+        <li><strong>的士業界三大團體</strong>認為制度<strong>太鬆</strong>：牌額太多、年費太低、無工時上限、無車費下限，要求大幅收緊以落實「的士為主、網約為輔」。</li>
+        <li><strong>平台、智慧交通聯盟、文教聯合會及絕大多數公眾</strong>認為制度<strong>太緊</strong>：1 萬個牌額遠低於需求、抽籤分配不公、保險／擁車／扣分要求不切實際。</li>
+        <li><strong>工會</strong>居中，焦點在司機勞動保障而非牌額之爭。</li>
+      </ul>
+      <p style="margin-top:12px;">爭議最大的數字是 <strong>10,000 個許可證上限</strong>；其次是<strong>抽籤</strong>還是<strong>現有活躍司機優先</strong>的分配之爭。有趣的是，立場相反的 Uber 和的士小巴商總會，都要求政府訂立<strong>透明、客觀、有觸發門檻的動態檢討機制</strong>，分歧只在調整方向應該向上還是向下。</p>
+    </div>
 
-<h3>丙・的士三團體：領導層高度重疊的車主利益圈</h3>
-<div class="card">
-  <ul>
-    <li><strong>鄭克和 MH（的士車行車主協會永遠會長兼主席）</strong>，人稱<strong>「的士大王」</strong>，1976 年創辦<strong>忠誠車行</strong>，2000 年獲頒榮譽勳章。2025–26 年曾去信特首李家超，稱業界忍受白牌車「11 年」，不排除司法覆核或罷駛；2026 年 6 月警告一次過發 1 萬個牌係「毀滅性打擊」。其協會名譽贊助人包括多名民建聯／航運交通界立法會議員（陳勇、易志明、陳恒鑌；<strong>陳恒鑌正是本小組委員會主席</strong>，而該會意見書正是寫給他的）。</li>
-    <li><strong>香港的士業議會（HKTC）</strong>：2016 年 5 月在政府鼓勵下成立的業界統合平台，創會成員 17 個的士團體（包括上述車行車主協會、的士小巴商總會及忠誠車行）。首任主席為學者熊永達；現任主席<strong>黃卓邦博士</strong>（曾獲委任入政府「的士服務質素委員會」）屬「服務改革派」，推過的士禮貌運動、倡的士裝 CCTV 及司機扣分制。副主席<strong>吳坤成</strong>同時是車行車主協會第四任永遠會長，曾為 2024 年的士加價辯護（「十年加十蚊唔多」）。</li>
-    <li><strong>香港的士小巴商總會（HKTPA）</strong>：1994 年 8 月成立，約 <strong>100 個車行／公司會員</strong>（自稱代表過半的士車主，未經核實）。現任理事長<strong>陳洲</strong>（第13屆，2024–27）；靈魂人物<strong>周國強</strong>（前理事長、現任會長之一，擁約 200 部的士，五大車行之一）任內成功爭取兩次加價（落旗 $24→$29）。網約車立場鷹派：稱 1 萬個牌「肯定太多」、Uber 要 3 萬個係「恐嚇市民同政府」、「網約車愈少愈好」，自稱 75% 車主牌照負資產、「我而家畀人搶掠」。</li>
-    <li><strong>關鍵觀察：</strong>鄭克和、吳坤成、黃卓邦、周國強在三個組織及的士業議會互相兼任職務。三份「獨立」意見書背後，其實是<strong>同一個車主利益圈子</strong>分三把聲音講話，代表面比組織數目看起來窄得多。</li>
-  </ul>
-</div>
+  </div><!-- /section-body -->
 
-<h3>丁・港運聯：勞聯系工會（不是工聯會）</h3>
-<div class="card">
-  <ul>
-    <li>香港運輸物流業工會聯會的會址（旺角上海街446-448號富達商業大廈14樓）正是<strong>港九勞工社團聯會（勞聯）</strong>總部，電郵域名 hkflu.org.hk 亦屬勞聯，可確認屬<strong>勞聯系統</strong>（勞聯立法會代表：林振昇、周小松），不是工聯會。</li>
-    <li>主席<strong>儲漢松</strong>。2026 年 1 月曾聯同外賣員工會向勞工處請願，要求盡快立法平台工作者工傷補償、確立「獨立工作者」法律身份，與今次意見書的訴求一脈相承。</li>
-  </ul>
-</div>
+  <!-- ===== 第四部分 ===== -->
+  <div id="s4" class="section-head">
+    <div class="section-head-inner">
+      <span class="section-num" aria-hidden="true">四</span>
+      <h2 class="section-title"><span class="sr-only">第四部分 · </span>背景調查：提交意見書嘅係乜水？</h2>
+      <span class="section-meta">背景核實</span>
+    </div>
+  </div>
 
-<h3>戊・香港文化教育聯合會：查無實體，疑似一稿兩投</h3>
-<div class="card" style="border-left:5px solid var(--red)">
-  <ul>
-    <li>遍查中英文網絡，<strong>搵唔到該會嘅網站、註冊紀錄、新聞報道、領導層名單或成立日期</strong>（只有名稱相近但不同的團體，如教聯會、香港中華文化發展聯合會）。簽署人「吳昊博士」身份無法核實（知名學者吳昊已於 2013 年離世，並非同一人）。</li>
-    <li><strong>一稿兩投紅旗：</strong>該會意見書 [CB(3)662/2026(02)] 與同日以個人名義提交的「吴昊」意見書 [CB(3)662/2026(239)] <strong>內容幾乎逐字相同</strong>，兩份都殘留簡體字（「良币驱逐劣币」「数据分析」），看來是同一份範本用兩個身份交了兩次。</li>
-    <li>一個文化教育團體走出來用管理經濟學評論交通政策、主張取消配額，立場恰好與平台利益一致。不過<strong>查無與平台公司或政治團體的資金關連</strong>，只能說其代表性要打個問號。</li>
-  </ul>
-</div>
+  <div class="section-body">
 
-<h3>己・公眾意見書中自我表明業界身份的個人</h3>
-<div class="card">
-  <ul>
-    <li><strong>網約車司機（約 25–30 名）：</strong>較具份量者包括 (337) 陳健安（10 年資深 Uber 司機，罕有地支持人車綁定、倡平台統一保單）、(392) 劉永輝（近 10 年全職司機，斥「無記分先發牌」係「離地…痴人說夢話」）、(63) 王凱麒（全職司機，反對發牌制度）、(373) TSOI Hugo（髮型師兼職司機）、(418) CHAUDHARY（3 年 Uber 司機）。</li>
-    <li><strong>的士業界個人（約 5 名）：</strong>(330) 許麗璇（自述的士車主，負數百萬車會貸款，盼轉營無人的士）、(125) 梁耀輝（以個人名義提交但行文用「<strong>本會</strong>強烈呼籲」，明顯代表不具名的士團體）、(09) 洪偉立（全職司機，於機場及口岸排隊等客，反對增加網約車）。</li>
-    <li><strong>同名現象（多半巧合，無法核實）：</strong>(08)「孫東先生」與創科局局長同名；(295)「陳凱欣小姐」與前立法會議員同名。兩份內容均無身份線索。</li>
-    <li><strong>盲點：</strong>27 份「只限委員參閱」意見書無公開文本，若有業界人士匿名發聲（如懼怕平台報復的在職司機或的士牌主），無從分析。</li>
-  </ul>
-</div>
+    <h3 class="group-head">甲・Uber 香港：12 年灰色地帶經營史</h3>
 
-<footer>
-  方法說明：7 份團體意見書全文閱讀（其中 2 份掃描本以影像閱讀）；9 冊公眾意見書合訂本（423 份有內容的意見書）以平行分析方式逐份歸類立場。27 份「只限委員參閱」文件未有公開文本，不在分析範圍。論點數目為約數（一份意見書可同時提出多項論點）。第四部分背景資料以網上公開來源核實（政府新聞公報、立法會文件、明報、HK01、星島、信報、unwire 等），未能核實之處已標明。<br>
-  資料來源：立法會網站 sc103 文件庫 ｜ 文件編號 CB(3)634/2026、CB(3)641/2026、CB(3)662/2026 系列 ｜ 報告生成日期：2026年6月11日
-</footer>
+    <div class="card">
+      <ul>
+        <li><strong>2014 年</strong>登陸香港；<strong>2015 年 8 月</strong>警方搜查其辦公室並拘捕司機；2017–18 年多名司機被定罪（非法載客取酬、無第三者保險），終審法院 2020 年駁回上訴。<strong>2021 年 8 月收購本地 HKTaxi</strong> 應用程式。</li>
+        <li>自稱規模（2025–26）：過去 12 個月逾 <strong>30,000 人</strong>透過 Uber 賺取收入（約 15,000 人全職、51% 為唯一收入）；服務 250 萬港人及逾 100 萬旅客。</li>
+        <li>香港區總經理為<strong>鍾志霆（Estyn Chung）</strong>，約 2021–22 年起在任；口徑：「的士同網約車唔係敵人」、六成司機每週揸少於 20 小時。</li>
+        <li>遊說往績：2025 年 7 月提交意見要求<strong>不設上限或至少 30,000 個牌</strong>、車齡放寬至 15 年；2026 年 5 月由 Uber <strong>全球公共政策主管 Andrew Byrne</strong> 警告若牌額不足，車費或<strong>上漲約七成</strong>（迪士尼至灣仔 $250 → $430+）；CEO Khosrowshahi 2025 年 12 月亦親自開腔促請「反映營運現實的配額」。</li>
+      </ul>
+    </div>
 
-</div>
+    <h3 class="group-head">乙・智慧交通聯盟：建制系產業聯盟（非平台白手套）</h3>
+
+    <div class="card">
+      <ul>
+        <li><strong>2026 年 3 月 14 日</strong>於數碼港成立。創會主席為立法會議員<strong>陳紹雄</strong>（工程界、中電出身）；理事長為<strong>張欣宇</strong>（前立法會議員〔新界北〕、港鐵工程師出身）。</li>
+        <li>創始機構成員包括<strong>機場管理局、港鐵公司、數碼港</strong>等，成立時焦點本為自動駕駛及智慧出行；運輸及物流局局長陳美寶有出席成立禮。性質上是<strong>建制系產業聯盟</strong>，不是民間倡議組織。</li>
+        <li>網約車立場往績：2026 年 5–6 月倡議首階段發 <strong>20,500 個牌</strong>（以每日 19 萬人次需求倒推需 ≥15,000 輛活躍網約車），警告「管了以後，無車可搭」；引用滬（2.6:1）、星（4.5:1）、深（5.9:1）的網約車對的士比例。</li>
+        <li><strong>查無平台資金關連</strong>：沒有報道指 Uber、滴滴、Tada、高德為其成員或金主；其 20,500 訴求亦與 Uber 的 30,000+ 並非同一口徑。惟完整成員及資金來源未有公開，未能完全核實。</li>
+      </ul>
+    </div>
+
+    <h3 class="group-head">丙・的士三團體：領導層高度重疊的車主利益圈</h3>
+
+    <!-- DARK FEATURE PANEL -->
+    <div class="feature-panel" role="region" aria-label="的士業界背景調查：三把聲音，一個圈子">
+      <div class="fp-kicker">背景調查 · 的士業界</div>
+      <h3 class="fp-title">三把聲音，一個圈子</h3>
+      <p class="fp-deck">三份以「獨立團體」名義提交、要求大幅收緊網約車的意見書，背後其實是<em>同一個車主利益圈子</em>：四名核心人物在三個組織之間互相兼任，三個組織又同屬香港的士業議會創會成員。代表面，比組織數目看起來窄得多。</p>
+
+      <!-- Cross-holding matrix -->
+      <p class="matrix-scroll-hint" aria-hidden="true">↔ 向右捲動查看完整對照表</p>
+      <div class="matrix-wrap" role="region" aria-label="核心人物交叉兼職矩陣">
+        <table class="cross-matrix" aria-label="的士三團體核心人物兼職情況">
+          <thead class="matrix-header">
+            <tr>
+              <th scope="col">核心人物 ／ 任職組織</th>
+              <th scope="col">的士車行車主協會</th>
+              <th scope="col">香港的士業議會</th>
+              <th scope="col">香港的士小巴商總會</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="person-row">
+              <td class="person-cell">
+                <div class="person-name">鄭克和「的士大王」</div>
+                <div class="person-role">車行車主協會永遠會長兼主席 · 忠誠車行創辦人</div>
+              </td>
+              <td class="marker-cell" data-label="的士車行車主協會"><span class="marker-filled" aria-label="本人任高層職位" title="本人任高層職位"></span></td>
+              <td class="marker-cell" data-label="香港的士業議會"><span class="marker-filled" aria-label="本人任高層職位" title="本人任高層職位"></span></td>
+              <td class="marker-cell" data-label="香港的士小巴商總會"><span class="marker-none" aria-label="未有紀錄" title="未有紀錄"></span></td>
+            </tr>
+            <tr class="person-row">
+              <td class="person-cell">
+                <div class="person-name">吳坤成</div>
+                <div class="person-role">的士業議會副主席 · 車行車主協會第四任永遠會長</div>
+              </td>
+              <td class="marker-cell" data-label="的士車行車主協會"><span class="marker-filled" aria-label="本人任高層職位" title="本人任高層職位"></span></td>
+              <td class="marker-cell" data-label="香港的士業議會"><span class="marker-filled" aria-label="本人任高層職位" title="本人任高層職位"></span></td>
+              <td class="marker-cell" data-label="香港的士小巴商總會"><span class="marker-none" aria-label="未有紀錄" title="未有紀錄"></span></td>
+            </tr>
+            <tr class="person-row">
+              <td class="person-cell">
+                <div class="person-name">黃卓邦 博士</div>
+                <div class="person-role">的士業議會現任主席 · 「服務改革派」</div>
+              </td>
+              <td class="marker-cell" data-label="的士車行車主協會"><span class="marker-none" aria-label="未有紀錄" title="未有紀錄"></span></td>
+              <td class="marker-cell" data-label="香港的士業議會"><span class="marker-filled" aria-label="本人任高層職位" title="本人任高層職位"></span></td>
+              <td class="marker-cell" data-label="香港的士小巴商總會"><span class="marker-none" aria-label="未有紀錄" title="未有紀錄"></span></td>
+            </tr>
+            <tr class="person-row">
+              <td class="person-cell">
+                <div class="person-name">周國強</div>
+                <div class="person-role">小巴商總會前理事長 · 現任會長之一 · 擁約 200 部的士</div>
+              </td>
+              <td class="marker-cell" data-label="的士車行車主協會"><span class="marker-none" aria-label="未有紀錄" title="未有紀錄"></span></td>
+              <td class="marker-cell" data-label="香港的士業議會"><span class="marker-outline" aria-label="所屬車行為創會成員機構" title="所屬車行為創會成員機構"></span></td>
+              <td class="marker-cell" data-label="香港的士小巴商總會"><span class="marker-filled" aria-label="本人任高層職位" title="本人任高層職位"></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="matrix-legend">
+        <div class="matrix-legend-item">
+          <span class="marker-filled" aria-hidden="true"></span>
+          <span>本人任高層職位</span>
+        </div>
+        <div class="matrix-legend-item">
+          <span class="marker-outline" aria-hidden="true"></span>
+          <span>所屬車行為創會成員機構</span>
+        </div>
+        <div class="matrix-legend-item">
+          <span class="marker-none" aria-hidden="true"></span>
+          <span>未有紀錄</span>
+        </div>
+        <div class="matrix-legend-note">三個團體均為香港的士業議會（2016 年）創會成員</div>
+      </div>
+
+      <!-- Supporting prose -->
+      <div class="fp-prose">
+        <h4>人物背景詳情</h4>
+        <ul>
+          <li><strong>鄭克和 MH（的士車行車主協會永遠會長兼主席）</strong>，人稱<strong>「的士大王」</strong>，1976 年創辦<strong>忠誠車行</strong>，2000 年獲頒榮譽勳章。2025–26 年曾去信特首李家超，稱業界忍受白牌車「11 年」，不排除司法覆核或罷駛；2026 年 6 月警告一次過發 1 萬個牌係「毀滅性打擊」。其協會名譽贊助人包括多名民建聯／航運交通界立法會議員（陳勇、易志明、陳恒鑌；<strong>陳恒鑌正是本小組委員會主席</strong>，而該會意見書正是寫給他的）。</li>
+          <li><strong>香港的士業議會（HKTC）</strong>：2016 年 5 月在政府鼓勵下成立的業界統合平台，創會成員 17 個的士團體（包括上述車行車主協會、的士小巴商總會及忠誠車行）。首任主席為學者熊永達；現任主席<strong>黃卓邦博士</strong>（曾獲委任入政府「的士服務質素委員會」）屬「服務改革派」，推過的士禮貌運動、倡的士裝 CCTV 及司機扣分制。副主席<strong>吳坤成</strong>同時是車行車主協會第四任永遠會長，曾為 2024 年的士加價辯護（「十年加十蚊唔多」）。</li>
+          <li><strong>香港的士小巴商總會（HKTPA）</strong>：1994 年 8 月成立，約 <strong>100 個車行／公司會員</strong>（自稱代表過半的士車主，未經核實）。現任理事長<strong>陳洲</strong>（第13屆，2024–27）；靈魂人物<strong>周國強</strong>（前理事長、現任會長之一，擁約 200 部的士，五大車行之一）任內成功爭取兩次加價（落旗 $24→$29）。網約車立場鷹派：稱 1 萬個牌「肯定太多」、Uber 要 3 萬個係「恐嚇市民同政府」、「網約車愈少愈好」，自稱 75% 車主牌照負資產、「我而家畀人搶掠」。</li>
+          <li><strong>關鍵觀察：</strong>鄭克和、吳坤成、黃卓邦、周國強在三個組織及的士業議會互相兼任職務。三份「獨立」意見書背後，其實是<strong>同一個車主利益圈子</strong>分三把聲音講話，代表面比組織數目看起來窄得多。</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="group-head">丁・港運聯：勞聯系工會（不是工聯會）</h3>
+
+    <div class="card">
+      <ul>
+        <li>香港運輸物流業工會聯會的會址（旺角上海街446-448號富達商業大廈14樓）正是<strong>港九勞工社團聯會（勞聯）</strong>總部，電郵域名 hkflu.org.hk 亦屬勞聯，可確認屬<strong>勞聯系統</strong>（勞聯立法會代表：林振昇、周小松），不是工聯會。</li>
+        <li>主席<strong>儲漢松</strong>。2026 年 1 月曾聯同外賣員工會向勞工處請願，要求盡快立法平台工作者工傷補償、確立「獨立工作者」法律身份，與今次意見書的訴求一脈相承。</li>
+      </ul>
+    </div>
+
+    <h3 class="group-head">戊・香港文化教育聯合會：建制系文教團體，疑似一稿兩投</h3>
+
+    <div class="card" style="border-top: 3px solid var(--redline);">
+      <ul>
+        <li><strong>更正（2026年6月16日）：</strong>本報告原稱「搵唔到該會網站／查無實體」屬<strong>錯誤，現予更正</strong>。該會確有網站（<a href="http://www.hkceu.org.hk" target="_blank" rel="noopener">hkceu.org.hk</a>），定位為「立足香港、背靠祖國、面向世界」的文化教育團體，主打大灣區交流、教育創新及青年發展，屬<strong>建制系</strong>性質。據其網站，主席團三名成員均為內地背景學者——<strong>王思迪</strong>（長春電子科技學院校長、吉林省政協委員）、<strong>劉國興</strong>（民革廣東省委常委、廣州市政協委員）、<strong>範朝斌</strong>（新加坡管理學院深圳海外教學中心校長）。</li>
+        <li>惟網站<strong>仍未公開成立日期、註冊編號、理事名單或會員規模</strong>；而提交意見書的<strong>簽署人「吳昊博士」並不在已公開的主席團名單之內</strong>，身份無法核實（知名學者吳昊已於 2013 年離世，並非同一人）。</li>
+        <li><strong>一稿兩投紅旗：</strong>該會意見書 [CB(3)662/2026(02)] 與同日以個人名義提交的「吴昊」意見書 [CB(3)662/2026(239)] <strong>內容幾乎逐字相同</strong>，兩份都殘留簡體字（「良币驱逐劣币」「数据分析」），看來是同一份範本用兩個身份交了兩次。</li>
+        <li>一個以大灣區文化教育交流為主、領導層為內地學者的團體，走出來用管理經濟學評論香港網約車配額、主張取消上限，本身已是<strong>不尋常的議題跨界</strong>；加上一稿兩投，其作為交通政策持份者的代表性要打個問號。惟<strong>查無證據顯示其與平台公司有資金或組織關連</strong>，立場與平台一致或屬巧合。</li>
+      </ul>
+    </div>
+
+    <h3 class="group-head">己・公眾意見書中自我表明業界身份的個人</h3>
+
+    <div class="card">
+      <ul>
+        <li><strong>網約車司機（約 25–30 名）：</strong>較具份量者包括 (337) 陳健安（10 年資深 Uber 司機，罕有地支持人車綁定、倡平台統一保單）、(392) 劉永輝（近 10 年全職司機，斥「無記分先發牌」係「離地…痴人說夢話」）、(63) 王凱麒（全職司機，反對發牌制度）、(373) TSOI Hugo（髮型師兼職司機）、(418) CHAUDHARY（3 年 Uber 司機）。</li>
+        <li><strong>的士業界個人（約 5 名）：</strong>(330) 許麗璇（自述的士車主，負數百萬車會貸款，盼轉營無人的士；獲《明報》報道）、(125) 梁耀輝（以個人名義提交但行文用「<strong>本會</strong>強烈呼籲」，明顯代表不具名的士團體）、(09) 洪偉立（全職司機，於機場及口岸排隊等客，反對增加網約車）。</li>
+        <li><strong>同名現象（多半巧合，無法核實）：</strong>(08)「孫東先生」與創科局局長同名；(295)「陳凱欣小姐」與前立法會議員同名。兩份內容均無身份線索。</li>
+        <li><strong>盲點：</strong>27 份「只限委員參閱」意見書無公開文本，若有業界人士匿名發聲（如懼怕平台報復的在職司機或的士牌主），無從分析。</li>
+      </ul>
+    </div>
+
+  </div><!-- /section-body -->
+
+  <!-- ===== FOOTER ===== -->
+  <footer role="contentinfo">
+    <div class="footer-label">方法說明</div>
+    <p>7 份團體意見書全文閱讀（其中 2 份掃描本以影像閱讀）；9 冊公眾意見書合訂本（423 份有內容的意見書）以平行分析方式逐份歸類立場。27 份「只限委員參閱」文件未有公開文本，不在分析範圍。論點數目為約數（一份意見書可同時提出多項論點）。第四部分背景資料以網上公開來源核實（政府新聞公報、立法會文件、明報、HK01、星島、信報、unwire 等），未能核實之處已標明。</p>
+    <p>資料來源：立法會網站 sc103 文件庫 ｜ 文件編號 CB(3)634/2026、CB(3)641/2026、CB(3)662/2026 系列 ｜ 報告生成日期：2026年6月11日</p>
+    <p style="margin-top:14px;"><a href="#top" class="to-top">↑ 回到頁首</a></p>
+  </footer>
+
+</div><!-- /wrap -->
+</main>
+
 </body>
 </html>
