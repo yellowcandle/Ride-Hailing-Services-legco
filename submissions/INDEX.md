@@ -3,7 +3,7 @@
 Source: https://www.legco.gov.hk/tc/legco-business/committees/subsidiary-legislation-subcommittee.html?2026&sc103#papers-and-reports
 Data feed: https://www.legco.gov.hk/bi/data/committees/hc-subcommittees/subsidiary-legislation/term-08/2026/sc103/papers/d.json
 Submission deadline: 2026-06-15 17:00 (invitation InvId=10000526, still open)
-Downloaded: 2026-06-11
+Downloaded: 2026-06-12 (re-checked; no new entries since 2026-06-10. LegCo revised sc103cb3-662-351-400-ec.pdf to add the previously missing submission (351) — local PDF and md extraction updated)
 
 | Paper No. | Date | Title | Local file |
 |---|---|---|---|
