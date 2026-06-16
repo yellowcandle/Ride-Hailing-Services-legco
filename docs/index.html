@@ -790,6 +790,7 @@ tr:nth-child(even) td { background: var(--row-tint); }
   border-top: 1px solid var(--navy-line);
   padding: 14px;
   vertical-align: middle;
+  background: transparent;  /* defeat the global even-row zebra tint (--row-tint) leaking onto the navy matrix */
 }
 
 .cross-matrix .person-row:first-child td { border-top: none; }
