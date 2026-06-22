@@ -10,7 +10,7 @@ Archive and analysis of public submissions to the HK LegCo Subcommittee on Four 
 
 ## Contents
 
-- `submissions/*.pdf` — 16 public submission PDFs (snapshot 2026-06-11; 43 paper entries, ~430 individual submissions)
+- `submissions/*.pdf` — 46 public submission PDFs (snapshot 2026-06-22; ~1,135 individual submissions + ~20 organisations across CB(3)662/673/688/710)
 - `submissions/INDEX.md` — manifest mapping paper numbers to files
 - `submissions/md/` — markitdown text extractions
 - `submissions/ANALYSIS.md` / `ANALYSIS.html` — stance tallies, party grouping, stakeholder background research
