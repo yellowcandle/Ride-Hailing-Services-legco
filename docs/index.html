@@ -34,6 +34,7 @@
   --quote-tint: #fdf9ee;
   --sans: "PingFang HK","PingFang TC","Microsoft JhengHei","Noto Sans HK",sans-serif;
   --serif: "MetroSung","Noto Serif HK","Noto Serif TC",serif;
+  --z-sticky: 100;   /* z-scale: sticky section rail (below any future modal/toast) */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -342,8 +343,8 @@ main { padding-block: 0 3rem; }
 .seg-unc { background: var(--faint); width: 4%; }
 
 @media (max-width: 600px) {
-  .seg-swc .seg-label { display: none; }
-  .seg-swc .seg-label-short { display: inline; }
+  .seg-swc .seg-label, .seg-local .seg-label { display: none; }
+  .seg-swc .seg-label-short, .seg-local .seg-label-short { display: inline; }
 }
 
 .stance-legend {
@@ -959,13 +960,25 @@ a:focus-visible { outline: 2px solid var(--redline); outline-offset: 2px; border
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
 
 /* ===== SECTION HEAD SCROLL MARGIN ===== */
-.section-head{ scroll-margin-top:16px; }
+.section-head{ scroll-margin-top:64px; }
 
 /* ===== MASTHEAD NAV ===== */
-.masthead-nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:16px;padding-top:14px;border-top:1px solid var(--navy-rule);}
-.masthead-nav a{color:#c9c4b8;font-size:0.82rem;text-decoration:none;transition:color .14s cubic-bezier(.2,1,.3,1);}
-.masthead-nav a:hover{color:var(--redline-on-dark);}
-.masthead-nav a:focus-visible{outline:2px solid var(--redline-on-dark);outline-offset:2px;border-radius:2px;}
+/* ===== STICKY SECTION RAIL (section navigation) ===== */
+.section-rail{position:sticky;top:0;z-index:var(--z-sticky);background:var(--paper);border-bottom:1.5px solid var(--ink);}
+.section-rail-inner{max-width:1040px;margin:0 auto;padding:0 24px;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;scroll-snap-type:x proximity;}
+.section-rail-inner::-webkit-scrollbar{display:none;}
+.section-rail a{flex-shrink:0;display:flex;align-items:baseline;gap:6px;padding:13px 14px;text-decoration:none;white-space:nowrap;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1.5px;scroll-snap-align:center;transition:color .15s cubic-bezier(.2,1,.3,1),border-color .15s cubic-bezier(.2,1,.3,1);}
+.section-rail .rail-num{font-family:var(--serif);font-size:.95rem;line-height:1;color:inherit;}
+.section-rail .rail-name{font-size:.9rem;font-weight:500;}
+.section-rail a:hover{color:var(--ink-2);}
+.section-rail a:focus-visible{outline:2px solid var(--redline);outline-offset:-2px;border-radius:2px;}
+.section-rail a.is-active{color:var(--ink);border-bottom-color:var(--redline);}
+.section-rail a.is-active .rail-num{color:var(--redline);}
+@media (max-width:600px){
+  .section-rail-inner{padding:0 14px;}
+  .section-rail a{padding:12px 11px;gap:5px;}
+}
+@media print{.section-rail{display:none;}}
 
 /* ===== LEDE TEASER ===== */
 .lede-teaser{margin:18px 0 0;}
@@ -986,10 +999,46 @@ a:focus-visible { outline: 2px solid var(--redline); outline-offset: 2px; border
 /* ===== STANCE BAR SHORT LABEL ===== */
 .seg-label-short{display:none;color:var(--ink);font-weight:600;}
 
+/* ===== TABBED SECTIONS (CSS-only, :target driven) ===== */
+.tabpanel { display: none; scroll-margin-top: 64px; }   /* clear the sticky rail */
+.tabpanel:target { display: block; }
+/* default to 序・規管框架 when no section is selected in the URL */
+.wrap:not(:has(.tabpanel:target)) #framework { display: block; }
+/* the incoming panel fades in on switch; the default panel is always visible (not gated) */
+@media (prefers-reduced-motion: no-preference) {
+  .tabpanel:target { animation: tab-in .32s cubic-bezier(.2,.8,.2,1); }
+  @keyframes tab-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+}
+
+/* ===== §6 TEXTUAL ANALYSIS ===== */
+/* Provenance register: navy + neutrals, deliberately OFF the three-stance
+   palette — authenticity is not a stance, so it must not borrow green/red. */
+.seg-local { background: var(--ink); }
+.seg-local .seg-label, .seg-local .seg-label-short { color: #fff; }
+.lang-cell { display: flex; align-items: center; gap: 8px; }
+.lang-num { font-weight: 700; color: var(--ink-2); min-width: 28px; }
+.lang-track { width: 80px; height: 6px; background: var(--rule-2); flex-shrink: 0; }
+.lang-fill { height: 6px; background: var(--ink); display: block; }
+.lang-pct { font-size: .8rem; color: var(--muted); }
+.ta-stat { display: flex; gap: 32px; align-items: center; flex-wrap: wrap; margin: 4px 0 26px; }
+.ta-bignum { font-family: var(--serif); font-size: 3.5rem; line-height: 1; color: var(--redline); font-weight: 600; }
+.ta-bigsub { font-size: .86rem; color: var(--muted); margin-top: 6px; max-width: 300px; }
+.ta-stat-note { flex: 1; min-width: 300px; font-size: .98rem; line-height: 1.7; color: var(--body); }
+.ta-callout { display: flex; flex-direction: column; gap: 12px; background: var(--quote-tint); border: 1px solid var(--rule); border-radius: 8px; padding: 22px 26px; }
+.ta-callout-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.ta-callout-kicker { font-size: .8rem; font-weight: 700; color: var(--redline); }
+.ta-callout-meta { font-size: .8rem; color: var(--muted); }
+.ta-callout-quote { font-family: var(--serif); font-size: 1.1rem; line-height: 1.7; color: var(--ink); }
+.ta-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.ta-tag { font-size: .76rem; border-radius: 99px; padding: 2px 10px; background: var(--rule-2); color: var(--ink-2); }
+.ta-tag-red { background: #f9e9e6; color: var(--redline); }
+
 /* ===== PRINT / REDUCED MOTION ===== */
 @media print {
   header.masthead { background: #1a1a2e !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .feature-panel { background: #1a1a2e !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  /* print every tab, not just the open one */
+  .tabpanel { display: block !important; }
 }
 </style>
 </head>
@@ -1012,7 +1061,6 @@ a:focus-visible { outline: 2px solid var(--redline); outline-offset: 2px; border
       <span class="dl-item">提交限期 2026年6月15日 17:00（已截止，限期前後文件陸續上載）</span>
       <span class="dl-item">報告生成 2026年6月22日</span>
     </div>
-    <nav class="masthead-nav" aria-label="章節導覽"><a href="#framework">規管框架</a><a href="#s1">一　整體立場</a><a href="#s2">二　持份者</a><a href="#s3">三　取態總表</a><a href="#s4">四　背景調查</a><a href="#s5">五　誰在擋路</a></nav>
   </div>
 </header>
 
@@ -1055,11 +1103,25 @@ a:focus-visible { outline: 2px solid var(--redline); outline-offset: 2px; border
   </div>
 </section>
 
+<!-- ===== STICKY SECTION RAIL ===== -->
+<nav class="section-rail" aria-label="章節導覽">
+  <div class="section-rail-inner">
+    <a href="#framework"><span class="rail-num" aria-hidden="true">序</span><span class="rail-name">規管框架</span></a>
+    <a href="#s1"><span class="rail-num" aria-hidden="true">一</span><span class="rail-name">整體立場</span></a>
+    <a href="#s2"><span class="rail-num" aria-hidden="true">二</span><span class="rail-name">持份者</span></a>
+    <a href="#s3"><span class="rail-num" aria-hidden="true">三</span><span class="rail-name">取態總表</span></a>
+    <a href="#s4"><span class="rail-num" aria-hidden="true">四</span><span class="rail-name">背景調查</span></a>
+    <a href="#s5"><span class="rail-num" aria-hidden="true">五</span><span class="rail-name">誰在擋路</span></a>
+    <a href="#s6"><span class="rail-num" aria-hidden="true">六</span><span class="rail-name">文本分析</span></a>
+  </div>
+</nav>
+
 <!-- ===== 第一部分 ===== -->
 <div class="wrap">
 
   <!-- ===== 序：規管框架 ===== -->
-  <div id="framework" class="section-head">
+  <section class="tabpanel" id="framework">
+  <div class="section-head">
     <div class="section-head-inner">
       <span class="section-num" aria-hidden="true">序</span>
       <h2 class="section-title"><span class="sr-only">前言 · </span>先搞清楚：政府在規管什麼？</h2>
@@ -1092,7 +1154,10 @@ a:focus-visible { outline: 2px solid var(--redline); outline-offset: 2px; border
     <p class="framework-source">框架細節見政府提交的<a href="https://www.legco.gov.hk/yr2026/chinese/brief/tlbcr240001007_20260526-c.pdf" target="_blank" rel="noopener">立法會參考資料摘要（2026年5月26日）</a>。</p>
   </div>
 
-  <div id="s1" class="section-head">
+  </section>
+
+  <section class="tabpanel" id="s1">
+  <div class="section-head">
     <div class="section-head-inner">
       <span class="section-num" aria-hidden="true">一</span>
       <h2 class="section-title"><span class="sr-only">第一部分 · </span>整體立場：贊成定反對？</h2>
@@ -1258,7 +1323,10 @@ a:focus-visible { outline: 2px solid var(--redline); outline-offset: 2px; border
   </div><!-- /section-body -->
 
   <!-- ===== 第二部分 ===== -->
-  <div id="s2" class="section-head">
+  </section>
+
+  <section class="tabpanel" id="s2">
+  <div class="section-head">
     <div class="section-head-inner">
       <span class="section-num" aria-hidden="true">二</span>
       <h2 class="section-title"><span class="sr-only">第二部分 · </span>持份者分組及重點主張</h2>
@@ -1604,7 +1672,7 @@ a:focus-visible { outline: 2px solid var(--redline); outline-offset: 2px; border
           <div class="card-meta">CB(3)710/2026(10)</div>
         </div>
         <div class="card-tags">
-          <span class="tag" style="background:var(--faint);color:var(--ink-2)">技術／中立</span>
+          <span class="tag" style="background:var(--rule-2);color:var(--ink-2)">技術／中立</span>
         </div>
       </div>
       <ul>
@@ -1627,7 +1695,10 @@ a:focus-visible { outline: 2px solid var(--redline); outline-offset: 2px; border
   </div><!-- /section-body -->
 
   <!-- ===== 第三部分 ===== -->
-  <div id="s3" class="section-head">
+  </section>
+
+  <section class="tabpanel" id="s3">
+  <div class="section-head">
     <div class="section-head-inner">
       <span class="section-num" aria-hidden="true">三</span>
       <h2 class="section-title"><span class="sr-only">第三部分 · </span>對建議法例的正／負取態總表</h2>
@@ -1790,7 +1861,10 @@ a:focus-visible { outline: 2px solid var(--redline); outline-offset: 2px; border
   </div><!-- /section-body -->
 
   <!-- ===== 第四部分 ===== -->
-  <div id="s4" class="section-head">
+  </section>
+
+  <section class="tabpanel" id="s4">
+  <div class="section-head">
     <div class="section-head-inner">
       <span class="section-num" aria-hidden="true">四</span>
       <h2 class="section-title"><span class="sr-only">第四部分 · </span>背景調查：提交意見書嘅係乜水？</h2>
@@ -1945,7 +2019,10 @@ a:focus-visible { outline: 2px solid var(--redline); outline-offset: 2px; border
   </div><!-- /section-body -->
 
   <!-- ===== 第五部分 ===== -->
-  <div id="s5" class="section-head">
+  </section>
+
+  <section class="tabpanel" id="s5">
+  <div class="section-head">
     <div class="section-head-inner">
       <span class="section-num" aria-hidden="true">五</span>
       <h2 class="section-title"><span class="sr-only">第五部分 · </span>誰在擋路：的士業界的真正盤算</h2>
@@ -1955,7 +2032,7 @@ a:focus-visible { outline: 2px solid var(--redline); outline-offset: 2px; border
 
   <div class="section-body">
 
-    <p style="font-size:.88rem;color:var(--muted);border-left:3px solid var(--gold);padding-left:12px;margin:0 0 20px;">編按：本節綜合第一至第四部分，立場較鮮明，與前文以證據為主的鋪陳分開處理。文中的人物兼職、贊助人關係及投訴數字，均為前文已交代並標明來源的事實；當中的論斷則屬本報告的判斷。</p>
+    <p style="font-size:.88rem;color:var(--muted);background:var(--header-tint);padding:13px 17px;border-radius:8px;margin:0 0 22px;"><span style="color:var(--gold-text);font-weight:700">編按：</span>本節綜合第一至第四部分，立場較鮮明，與前文以證據為主的鋪陳分開處理。文中的人物兼職、贊助人關係及投訴數字，均為前文已交代並標明來源的事實；當中的論斷則屬本報告的判斷。</p>
 
     <p>幾乎冇人反對規管網約車。咁的士業界喺度反對緊乜？逐項拆開，答案唔係安全，係供應同牌價。</p>
 
@@ -2019,6 +2096,114 @@ a:focus-visible { outline: 2px solid var(--redline); outline-offset: 2px; border
     </div>
 
   </div><!-- /section-body -->
+  </section>
+
+  <!-- ===== 第六部分：文本分析 ===== -->
+  <section class="tabpanel" id="s6">
+  <div class="section-head">
+    <div class="section-head-inner">
+      <span class="section-num" aria-hidden="true">六</span>
+      <h2 class="section-title"><span class="sr-only">第六部分 · </span>文本分析：用程式拆解 1,079 份意見書</h2>
+      <span class="section-meta">可重現的計算分析</span>
+    </div>
+  </div>
+  <div class="section-body">
+
+    <p style="margin:0 0 18px;">前五部分靠人手逐份歸類；這一部分改用程式，把 15 冊公眾意見書合訂本拆成 <strong>1,079 份結構化紀錄</strong>（<code>submissions/corpus.jsonl</code>），為每份計算「語言指紋」，再以字元 4‑gram 近似比對偵測範本式重複。所有步驟可重現，程式碼見 <a href="https://github.com/yellowcandle/Ride-Hailing-Services-legco" target="_blank" rel="noopener"><code>parse_submissions.py</code> 及 <code>analyze_text.py</code></a>。下列語言特徵均屬<strong>疑似訊號而非定論</strong>：簡體或內地用詞可能只是輸入法或習慣，需多個訊號疊加才有參考價值。</p>
+
+    <h3 class="group-head">甲・語言光譜：邊啲意見書「本地味」最濃？</h3>
+    <p style="margin:0 0 16px;">香港市民日常書寫以繁體＋粵語口語為主，並常見中英夾雜（<span class="emphasis">call 車</span>、<span class="emphasis">個 app</span>、<span class="emphasis">揸車 chok</span>）——這正是本地粵語使用者的標記。光譜另一端是<strong>簡體為主</strong>或夾帶<strong>內地用詞</strong>（出租車、師傅、打車），可能指向非本地或轉貼來源。兩端都只是訊號，疊加先有意義。</p>
+
+    <!-- Language spectrum bar -->
+    <div class="stance-bar-wrap" role="img" aria-label="意見書語言光譜分佈：本地語感約 25%，中性書面語約 72%，簡體或內地用詞約 3%">
+      <div class="stance-bar">
+        <div class="seg seg-local" style="width:25%">
+          <span class="seg-label">本地語感　25%</span><span class="seg-label-short">25%</span>
+        </div>
+        <div class="seg" style="width:72%;background:var(--rule)"></div>
+        <div class="seg" style="width:3%;background:var(--muted)"></div>
+      </div>
+
+      <div class="stance-legend" aria-label="圖例">
+        <div class="legend-row">
+          <span class="swatch" style="background:var(--ink)" aria-hidden="true"></span>
+          <span class="legend-label">本地語感（粵語／中英夾雜）</span>
+          <span class="legend-desc">寫得「好香港」——與網軍灌水的指控相反</span>
+          <span class="legend-count" style="color:var(--ink-2)">268</span>
+        </div>
+        <div class="legend-row">
+          <span class="swatch" style="background:var(--rule);border:1px solid var(--rule-2)" aria-hidden="true"></span>
+          <span class="legend-label">中性書面語</span>
+          <span class="legend-desc">繁體，無明顯地域特徵</span>
+          <span class="legend-count">≈781</span>
+        </div>
+        <div class="legend-row">
+          <span class="swatch" style="background:var(--muted)" aria-hidden="true"></span>
+          <span class="legend-label">簡體為主／內地用詞</span>
+          <span class="legend-desc">疑似非本地或轉貼來源（10 簡體 + 21 內地用詞）</span>
+          <span class="legend-count" style="color:var(--muted)">≈30</span>
+        </div>
+        <div class="legend-row">
+          <span class="swatch" style="background:var(--ink);opacity:.55" aria-hidden="true"></span>
+          <span class="legend-label">限期後 CB(3)710 最濃</span>
+          <span class="legend-desc">本地語感佔 40%，多為真人急就章</span>
+          <span class="legend-count" style="color:var(--ink-2)">40%</span>
+        </div>
+      </div>
+    </div>
+
+    <h4 style="font-size:.95rem;font-weight:700;color:var(--ink-2);margin:26px 0 10px;">各批次語言特徵分佈</h4>
+    <div class="scroll-x">
+      <table class="arg-table">
+        <thead>
+          <tr>
+            <th scope="col">批次</th>
+            <th scope="col">份數</th>
+            <th scope="col">本地語感（粵語／中英夾雜）</th>
+            <th scope="col">簡體為主</th>
+            <th scope="col">內地用詞</th>
+            <th scope="col">英文／混合</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>CB(3)662</td><td>373</td><td><span class="lang-cell"><span class="lang-num">86</span><span class="lang-track"><span class="lang-fill" style="width:58%"></span></span><span class="lang-pct">23%</span></span></td><td>4</td><td>6</td><td>117</td></tr>
+          <tr><td>CB(3)673</td><td>216</td><td><span class="lang-cell"><span class="lang-num">41</span><span class="lang-track"><span class="lang-fill" style="width:45%"></span></span><span class="lang-pct">18%</span></span></td><td>3</td><td>7</td><td>53</td></tr>
+          <tr><td>CB(3)688</td><td>374</td><td><span class="lang-cell"><span class="lang-num">94</span><span class="lang-track"><span class="lang-fill" style="width:63%"></span></span><span class="lang-pct">25%</span></span></td><td>2</td><td>4</td><td>64</td></tr>
+          <tr><td>CB(3)710</td><td>116</td><td><span class="lang-cell"><span class="lang-num">47</span><span class="lang-track"><span class="lang-fill" style="width:100%"></span></span><span class="lang-pct" style="color:var(--ink-2);font-weight:700">40%</span></span></td><td>1</td><td>4</td><td>35</td></tr>
+          <tr style="font-weight:700;background:var(--header-tint);"><td>合計</td><td>1,079</td><td><span class="lang-cell"><span class="lang-num">268</span><span class="lang-track" style="background:var(--rule)"><span class="lang-fill" style="width:63%"></span></span><span class="lang-pct" style="color:var(--ink-2);font-weight:700">25%</span></span></td><td>10</td><td>21</td><td>269</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="margin:16px 0 0;"><strong>讀數：</strong>約 <span class="emphasis">268 份（25%）</span>意見書帶明顯本地語感（粵語語助詞或繁體中英夾雜），而簡體為主（10）及內地用詞（21）合共僅約 30 份。換言之，<strong>要求放寬的多數派，絕大部分寫得「好香港」</strong>——這與「網軍灌水」的指控相反。限期後上載的 CB(3)710 本地語感比例最高（40%），反映臨近截止湧現的多是真人急就章。</p>
+
+    <h3 class="group-head">乙・範本式意見書，到底有幾普遍？</h3>
+    <div class="ta-stat">
+      <div>
+        <div class="ta-bignum">≈1–1.5%</div>
+        <div class="ta-bigsub">1,079 份中，僅約 10–17 份屬字面照抄的範本信</div>
+      </div>
+      <p class="ta-stat-note">以 MinHash（字元 4‑gram）做近似比對，在「幾乎逐字相同」的門檻下，真正複製貼上的範本只集中於 2–3 個細小群組。坊間「大量範本」的印象，多來自<strong>共用論點</strong>（同樣聚焦 1 萬牌額），而非同一封信被抄很多次。</p>
+    </div>
+
+    <div class="ta-callout" role="blockquote" aria-label="最大範本群組">
+      <div class="ta-callout-head">
+        <span class="ta-callout-kicker">最大範本群組</span>
+        <span class="ta-callout-meta">7 封近乎逐字相同 · 橫跨 CB(3)688／710</span>
+      </div>
+      <div class="ta-callout-quote">「致：香港特別行政區立法會　主旨：反對批出 10,000 個網約車牌⋯⋯」</div>
+      <div class="ta-tags">
+        <span class="ta-tag ta-tag-red">立場：收緊（親的士）</span>
+        <span class="ta-tag">零粵語／中英夾雜</span>
+        <span class="ta-tag">疑似人手草擬</span>
+      </div>
+      <p style="margin:0;font-size:.92rem;line-height:1.6;color:var(--body);">換言之，字面照抄的範本動員確實存在，但規模很小，<strong>而且偏向收緊（親的士）一方</strong>；要求放寬的多數派，幾乎全是各自措辭的獨立意見書。</p>
+    </div>
+
+    <p style="margin:16px 0 0;font-size:.86rem;color:var(--muted);"><strong>方法與限制：</strong>語言特徵為疑似訊號，非身份定論；近似比對只捕捉字元層面的重複，改寫過的範本不會被計入；個別超長意見書的原始計數未按長度標準化。OCR 掃描本（汽車交通運輸業總工會）及「只限委員參閱」文件不在文本分析範圍。</p>
+
+  </div><!-- /section-body -->
+  </section>
 
   <!-- ===== FOOTER ===== -->
   <footer role="contentinfo">
@@ -2037,5 +2222,27 @@ a:focus-visible { outline: 2px solid var(--redline); outline-offset: 2px; border
 </div><!-- /wrap -->
 </main>
 
+<script>
+// Mark the active section in the sticky rail (CSS :target shows the panel but
+// can't style the matching rail link), and keep that link in view on mobile
+// where the rail scrolls horizontally. Defaults to #framework when no hash.
+(function () {
+  var rail = document.querySelector('.section-rail-inner');
+  var links = document.querySelectorAll('.section-rail a');
+  function sync() {
+    var id = location.hash.slice(1) || 'framework';
+    links.forEach(function (a) {
+      var on = a.getAttribute('href') === '#' + id;
+      a.classList.toggle('is-active', on);
+      if (on && rail) {
+        // centre the active link within the rail without scrolling the page
+        rail.scrollTo({ left: a.offsetLeft - rail.clientWidth / 2 + a.clientWidth / 2, behavior: 'smooth' });
+      }
+    });
+  }
+  window.addEventListener('hashchange', sync);
+  sync();
+})();
+</script>
 </body>
 </html>

@@ -1,0 +1,59 @@
+{
+  "batches": {
+    "662": {
+      "n": 373,
+      "vernacular": 86,
+      "simp": 4,
+      "mainland": 6,
+      "en": 117
+    },
+    "673": {
+      "n": 216,
+      "vernacular": 41,
+      "simp": 3,
+      "mainland": 7,
+      "en": 53
+    },
+    "688": {
+      "n": 374,
+      "vernacular": 94,
+      "simp": 2,
+      "mainland": 4,
+      "en": 64
+    },
+    "710": {
+      "n": 116,
+      "vernacular": 47,
+      "simp": 1,
+      "mainland": 4,
+      "en": 35
+    }
+  },
+  "clusters": [
+    {
+      "size": 7,
+      "papers": [
+        "CB(3)688/2026",
+        "CB(3)710/2026"
+      ],
+      "vernacular": 0,
+      "simp": 0,
+      "mainland": 0,
+      "sample": "致：香港特別行政區立法會\n\n主旨：反對批出 10,000 個網約車牌\n\n本人就政府建議首階段批出 10,000 個網約車牌一事，表示強烈反對。此舉\n對的士行業衝"
+    },
+    {
+      "size": 3,
+      "papers": [
+        "CB(3)662/2026",
+        "CB(3)673/2026"
+      ],
+      "vernacular": 0,
+      "simp": 0,
+      "mainland": 0,
+      "sample": "此將直接限制未來的車輛供應，並影響我的乘車體驗。這可能意味著未來配對車輛的時間更長、價格更高，以及出行選擇減少。"
+    }
+  ],
+  "n_records": 1079,
+  "n_in_clusters": 10,
+  "n_clusters": 2
+}

@@ -156,4 +156,57 @@ Two axes: (a) attitude to regulating ride-hailing at all, and (b) attitude to th
 
 ---
 
+## 6. Textual analysis — computational pass over the 1,079 individual submissions
+
+The sections above classify submissions by hand. This pass is programmatic and
+reproducible: the bundled `-ec` volumes are split into a structured corpus
+(`submissions/corpus.jsonl`, 1,079 records) by `parse_submissions.py`, each
+record carrying a **language profile**, and `analyze_text.py` runs MinHash
+char-4-gram near-duplicate detection. Language features are *signals, not
+verdicts* — simplified script or mainland vocabulary can be an IME default or
+habit, and only matter when several stack.
+
+### 6.1 Language spectrum (authenticity signal)
+
+HK residents typically write Traditional + Cantonese register, often code-mixing
+inline English (`call車`, `個app`, `揸車chok`) — a native-fluency marker. The
+opposite pole is simplified-script or mainland term-choice (出租車/師傅/打車).
+
+| Batch | n | Local vernacular (Cantonese / code-mix) | Simplified-leaning | Mainland vocab | EN/mixed |
+|---|---|---|---|---|---|
+| CB(3)662 | 373 | 86 (23%) | 4 | 6 | 117 |
+| CB(3)673 | 216 | 41 (18%) | 3 | 7 | 53 |
+| CB(3)688 | 374 | 94 (25%) | 2 | 4 | 64 |
+| CB(3)710 | 116 | 47 (40%) | 1 | 4 | 35 |
+| **Total** | **1,079** | **268 (25%)** | **10** | **21** | **269** |
+
+**Finding:** ~268 (25%) read as authentically local; only ~30 sit at the
+simplified/mainland-vocab pole. The pro-loosening majority **writes like
+locals** — the opposite of an astroturf signature. The post-deadline CB(3)710
+batch is the most vernacular (40%), consistent with real last-minute submitters.
+
+### 6.2 How templated are the submissions, really?
+
+MinHash (char-4-gram, Jaccard) at a near-identical threshold finds only **~10–17
+of 1,079 (~1–1.5%)** that are literal duplicates, in 2–3 small clusters. The
+largest is **7 near-identical "反對批出 10,000 個網約車牌" pro-taxi template
+letters** spanning CB(3)688 and CB(3)710, **all with zero Cantonese/code-mix** —
+the drafted, non-grassroots signature.
+
+**Implication:** the "範本式反制動員" noted in §1/§5 is real but **small in
+copy-paste terms, and skews to the *tighten* (pro-taxi) side**; the loosening
+majority is overwhelmingly independently worded. The popular impression of "mass
+templates" comes from **shared talking points** (everyone targeting the 10,000
+cap), not from one letter copied many times.
+
+*Limits: language features are suspected signals, not identity proof;
+near-duplicate matching catches only character-level repetition (a reworded
+template won't register); per-record raw counts aren't length-normalised. The
+OCR'd union scan and members-only files are outside this pass.*
+
+> Note: the standalone `ANALYSIS.html` predates this section; the published
+> report `docs/index.html` carries these findings as §6「文本分析」.
+
+---
+
 *Method note: organisation submissions read in full (2 of the original taxi PDFs were scanned and read visually; 汽車交通運輸業總工會's scanned PDF was recovered with PaddleOCR (chinese_cht) via `ocr_710_11.py`, not hand-proofread). 15 bundled volumes of individual public submissions (≈1,135 with content) across CB(3)662/673/688/710 were analysed in parallel and stance categories assigned per submission. Members-only entries are excluded. Counts are approximate (submissions often make several points) and the support-but-object / oppose-outright boundary involves judgement, but the directional picture — near-unanimous opposition to the 10,000 cap among individuals, mirrored by a smaller, more organised pro-taxi counter-bloc post-deadline — is unambiguous. Background verification of the post-deadline organisations (DiDi, Amap, 新思維, the new taxi/think-tank groups, 保聯, the disability body) has not yet been done to the standard of §4 in the published report; the one cross-link confirmed from existing research is that 周國強 of 智慧出行聯合商會 is the same 的士小巴商總會 taxi owner already profiled.*
