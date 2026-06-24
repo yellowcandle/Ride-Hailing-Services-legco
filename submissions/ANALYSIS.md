@@ -204,6 +204,42 @@ near-duplicate matching catches only character-level repetition (a reworded
 template won't register); per-record raw counts aren't length-normalised. The
 OCR'd union scan and members-only files are outside this pass.*
 
+### 6.3 Paraphrased templates — the reworded-letter families MinHash misses
+
+§6.2 admits its blind spot: a template reworded enough won't trip the
+near-identical bar. A second pass closes it — `analyze_text.py` now also scores
+every pair on **TF-IDF char-4-gram cosine** (idf-weighted, so it links documents
+that reuse *distinctive phrasing* rather than just function words) and clusters
+shared-skeleton "families". The cut is a judgement call, so the threshold is
+reported as a curve, not hidden: **cos≥0.25 → 57 docs (5%), cos≥0.35 → 31 (3%),
+cos≥0.45 → 19 (1%)**.
+
+At the working threshold (cos≥0.35): **5 families, 31 submissions (~3%), of which
+21 are invisible to the MinHash pass** — i.e. paraphrased, not copied. The
+families are small but their *signatures* are telling, and they sit on both sides:
+
+- **14 docs — anti-quota / anti-lottery passenger frame** (`10,000 配額上限、採用
+  抽籤方式分配…配對時間更長、價格更高、選擇減少`), 11 of them new vs MinHash,
+  spread 06-09→06-13 (peak 5 on 06-09). The loosening side reuses phrasing too.
+- **7 docs — pro-taxi「寡頭壟斷」monopoly-risk frame** (試行計劃 + 兩年檢討機制 +
+  平台補貼搶佔市場後加抽成), **zero Cantonese/code-mix**, in a tight **06-13→06-14**
+  window (peak 6 on 06-13) — the drafted-and-coordinated signature §6.2 flagged,
+  now with a date burst to match.
+- **4 docs — an English-language template** (`lottery-based… 10,000 vehicle permit…
+  longer matching time, higher price, fewer choices`), all new vs MinHash: a small
+  coordinated English campaign the Chinese-only near-dup scan never saw.
+
+**Implication:** paraphrased templating is real and modestly *larger* than literal
+copy-paste — but still only ~3%, which **confirms rather than overturns §6.2**: the
+"mass templates" impression is shared talking points, not mass copying. The most
+*coordinated*-looking families (tight date bursts, zero vernacular) still skew to
+the **tighten / pro-taxi** side, consistent with §6.1–6.2.
+
+*Limits: cosine families are phrasing-overlap, not proven coordination — a date
+burst strengthens the read but isn't proof; the 36-char "frame" labels are a
+greedy stitch of shared 4-grams (a readable fingerprint, not a verbatim quote);
+same corpus caveats as §6.1–6.2 apply.*
+
 > Note: the standalone `ANALYSIS.html` predates this section; the published
 > report `docs/index.html` carries these findings as §6「文本分析」.
 
