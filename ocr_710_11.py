@@ -1,64 +1,91 @@
-"""OCR the scanned union submission CB(3)710/2026(11), sc103cb3-710-11-c.pdf.
-PaddleOCR's package init pulls in langchain (for a RAG retriever we don't use) and
-the installed langchain is too new (langchain.docstore etc. removed). Stub any
-missing langchain* submodule so the import succeeds; OCR itself doesn't need it.
-ponytail: stub via meta-path finder, not by downgrading the user's langchain.
+"""OCR scanned/image submission PDFs with Unlimited-OCR (Baidu's doc VLM).
+
+Uses the device-agnostic fork `sabafallah/Unlimited-OCR-Universal` so it runs on
+Apple Silicon without a GPU. Quality is markedly better than the old PaddleOCR pass
+(correct zh-Hant, headings vs. body, citations) — see git history for the PaddleOCR
+version if you ever need it back.
+
+Setup (one-time, isolated venv — keeps these heavy deps out of the global env):
+    python3 -m venv .venv-ocr
+    .venv-ocr/bin/pip install torch "transformers==4.57.1" pymupdf pillow einops \
+        addict matplotlib requests torchvision easydict
+    # transformers MUST be 4.57.1 — 5.x removed is_torch_fx_available and the
+    # fork's DeepSeek-V2 code won't import.
+
+Run (CPU + float32 is the only config that both fits 19 GB RAM and stays accurate):
+    .venv-ocr/bin/python ocr_710_11.py                                  # default 710-11
+    .venv-ocr/bin/python ocr_710_11.py submissions/sc103cb3-XXX-c.pdf   # any scanned PDF
+
+~2 min/page on an M3 Pro CPU. For a big batch, use ocr_modal.py (same model, GPU, ~10x).
+
+ponytail: default device=cpu, NOT mps — mps float32 OOM-kills on 19 GB and mps bf16
+produces degenerate output (the fork's own caveat). cpu uses unified RAM + swap and
+stays correct. Override with OCR_DEVICE=cuda on a GPU box.
 """
-import os
-os.environ.setdefault("OMP_NUM_THREADS", "1")
-os.environ.setdefault("CPU_NUM_THREADS", "1")
-os.environ.setdefault("FLAGS_use_mkldnn", "0")
-import sys, types, importlib.abc, importlib.machinery
+import os, sys, re, time, glob, tempfile
 
-class _StubFinder(importlib.abc.MetaPathFinder, importlib.abc.Loader):
-    def find_spec(self, name, path, target=None):
-        root = name.split(".")[0]
-        if root in ("langchain", "langchain_community"):
-            return importlib.machinery.ModuleSpec(name, self)
-        return None
-    def create_module(self, spec):
-        m = types.ModuleType(spec.name)
-        m.__path__ = []  # mark as package so submodule imports keep resolving
-        return m
-    def exec_module(self, module):
-        # any attribute access returns a fresh dummy class
-        module.__getattr__ = lambda n: type(str(n), (), {})
-sys.meta_path.insert(0, _StubFinder())
+os.environ.setdefault("HF_HUB_DISABLE_XET", "1")           # avoid the xet writer bug
+os.environ.setdefault("PYTORCH_ENABLE_MPS_FALLBACK", "1")
+os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 
+import torch
 import fitz  # PyMuPDF
-from paddleocr import PaddleOCR
+from transformers import AutoModel, AutoTokenizer
 
-PDF = "submissions/sc103cb3-710-11-c.pdf"
-OUT = "submissions/md/sc103cb3-710-11-c.md"
+MODEL_ID = "sabafallah/Unlimited-OCR-Universal"
+DEFAULT_PDF = "submissions/sc103cb3-710-11-c.pdf"
 DPI = 220
+PROMPT = "<image>Free OCR."
 
-ocr = PaddleOCR(
-    lang="chinese_cht",
-    text_detection_model_name="PP-OCRv5_mobile_det",
-    text_recognition_model_name="PP-OCRv5_mobile_rec",
-    use_doc_orientation_classify=False,
-    use_doc_unwarping=False,
-    use_textline_orientation=False,
-)
+_t0 = time.time()
+def log(m): print(f"[{time.time() - _t0:7.1f}s] {m}", flush=True)
 
-doc = fitz.open(PDF)
-pages_text = []
-import tempfile, os
-tmp = tempfile.mkdtemp()
-for i, page in enumerate(doc):
-    pix = page.get_pixmap(dpi=DPI)
-    img_path = os.path.join(tmp, f"p{i:02d}.png")
-    pix.save(img_path)
-    res = ocr.predict(img_path)
-    lines = []
-    for r in res:
-        d = r if isinstance(r, dict) else getattr(r, "json", {})
-        texts = d.get("rec_texts") or []
-        lines.extend(t for t in texts if t and t.strip())
-    pages_text.append("\n".join(lines))
-    print(f"page {i+1}/{doc.page_count}: {sum(len(l) for l in lines)} chars", flush=True)
+DEVICE = os.environ.get("OCR_DEVICE") or ("cuda" if torch.cuda.is_available() else "cpu")
+DTYPE = torch.bfloat16 if DEVICE == "cuda" else torch.float32
 
-body = "\n\n".join(f"<!-- page {i+1} -->\n{t}" for i, t in enumerate(pages_text))
-header = "立法會CB(3)710/2026(11)號文件 — 汽車交通運輸業總工會\n（PaddleOCR chinese_cht 自動辨識，掃描本，未經人手校對）\n\n"
-open(OUT, "w", encoding="utf-8").write(header + body + "\n")
-print("WROTE", OUT, "total chars:", len(header + body))
+log(f"loading model on {DEVICE} ({DTYPE}); first run downloads ~6.7 GB")
+tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, trust_remote_code=True)
+model = AutoModel.from_pretrained(
+    MODEL_ID, trust_remote_code=True, dtype=DTYPE, attn_implementation="eager",
+).eval().to(DEVICE)
+log("model loaded")
+
+
+def read_result(out_dir):
+    """infer(save_results=True) writes the parsed markdown here; filename undocumented."""
+    files = sorted(f for f in glob.glob(os.path.join(out_dir, "**", "*"), recursive=True)
+                   if os.path.isfile(f) and f.lower().endswith((".md", ".mmd", ".txt")))
+    text = "\n\n".join(open(f, encoding="utf-8").read() for f in files)
+    # drop the model's image placeholders (e.g. logos) — no images saved, text-only archive
+    return re.sub(r"!\[[^\]]*\]\([^)]*\)\s*", "", text)
+
+
+def ocr_pdf(pdf_path):
+    stem = os.path.splitext(os.path.basename(pdf_path))[0]
+    out_md = f"submissions/md/{stem}.md"
+    doc = fitz.open(pdf_path)
+    log(f"{stem}: {doc.page_count} pages @ {DPI} DPI")
+    tmp = tempfile.mkdtemp()
+    pages = []
+    for i in range(doc.page_count):
+        img = os.path.join(tmp, f"p{i:03d}.png")
+        doc[i].get_pixmap(dpi=DPI).save(img)
+        out_dir = tempfile.mkdtemp()
+        ret = model.infer(
+            tokenizer, prompt=PROMPT, image_file=img, output_path=out_dir,
+            base_size=1024, image_size=640, crop_mode=True, max_length=32768,
+            no_repeat_ngram_size=35, ngram_window=128, save_results=True)
+        text = (read_result(out_dir) or (str(ret) if ret else "")).strip()
+        pages.append(text)
+        log(f"  page {i+1}/{doc.page_count}: {len(text)} chars")
+
+    header = ("立法會掃描本 — Unlimited-OCR 自動辨識，未經人手校對\n"
+              f"（來源 {os.path.basename(pdf_path)}）\n\n")
+    body = "\n\n".join(f"<!-- page {i+1} -->\n{t}" for i, t in enumerate(pages))
+    with open(out_md, "w", encoding="utf-8") as f:
+        f.write(header + body + "\n")
+    log(f"WROTE {out_md} ({len(header + body)} chars)")
+
+
+for pdf in (sys.argv[1:] or [DEFAULT_PDF]):
+    ocr_pdf(pdf)

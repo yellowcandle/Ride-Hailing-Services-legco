@@ -22,9 +22,10 @@ Primary audience: HK public and journalists, on mobile, reading Traditional Chin
 2. **Download PDFs** → `submissions/*.pdf`.
 3. **Extract text** → `submissions/md/*.md` via **markitdown**. (`submissions/md/*.err` is the
    extraction stderr and is gitignored.)
-4. **Scanned/image PDFs** markitdown can't read → OCR with `ocr_710_11.py` (PaddleOCR
-   `chinese_cht`). It installs a `langchain` meta-path stub so PaddleOCR imports without
-   downgrading the user's langchain — see the file docstring before reusing/editing it.
+4. **Scanned/image PDFs** markitdown can't read → OCR with `ocr_710_11.py` (Unlimited-OCR
+   doc VLM via the `sabafallah/Unlimited-OCR-Universal` fork, CPU+float32 in `.venv-ocr`;
+   ~2 min/page on an M3 Pro, accurate zh-Hant + layout). For a big batch, `ocr_modal.py`
+   runs the same model on a cloud GPU (~10x). See either file's docstring before reusing.
 5. **Analysis** is hand-written in `submissions/ANALYSIS.md` (+ `ANALYSIS.html`); the
    paper-number → file manifest is `submissions/INDEX.md`.
 6. **Published report** `docs/index.html` is hand-authored single-file HTML, served by GitHub
